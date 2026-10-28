@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Агентам и совместные закупки — Ulan Express</title>
+  <meta name="description" content="Агентская программа Ulan Express: приводите клиентов и получайте процент с заказов. Совместные закупки из Китая в Telegram-группах.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="agents">
+
+<main>
+  <section class="container page-head">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>Агентам и закупки</span></nav>
+    <div class="agent-hero">
+      <span class="eyebrow">Агентская программа</span>
+      <h1 class="h1">Приводите клиентов — <em>получайте процент</em></h1>
+      <p class="lead">Любой желающий может стать нашим агентом или партнёром и получать комиссию с каждого приведённого заказа.</p>
+      <div class="benefits">
+        <div class="benefit"><b>%</b><span>с каждого заказа приведённого клиента</span></div>
+        <div class="benefit"><b>30 дней</b><span>клиент закреплён за вами после перехода по ссылке</span></div>
+        <div class="benefit"><b>Ссылка</b><span>личная реферальная ссылка с вашим кодом</span></div>
+        <div class="benefit"><b>0 ₽</b><span>никаких вложений и абонентской платы</span></div>
+      </div>
+      <div class="hero__cta">
+        <a href="#agentForm" class="btn btn--neon">Стать агентом</a>
+        <a href="#groups" class="btn btn--ghost">Совместные закупки</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ КАК ЭТО РАБОТАЕТ ============ -->
+  <section class="container section narrow">
+    <div class="section__head">
+      <span class="eyebrow">Как это работает</span>
+      <h2 class="h2">Три шага</h2>
+    </div>
+    <ol class="steps">
+      <li><b>1</b><span>Оставляете заявку и получаете код агента</span></li>
+      <li><b>2</b><span>Делитесь ссылкой с клиентами</span></li>
+      <li><b>3</b><span>Получаете процент с их заказов</span></li>
+    </ol>
+    <div class="reflink">
+      <span class="field__label">Так будет выглядеть ваша ссылка</span>
+      <code>china-calculator.online/?ref=AGENT01</code>
+      <div class="grid-2">
+        <button type="button" class="btn btn--ghost btn--sm" data-copy="https://china-calculator.online/?ref=AGENT01" data-copied="Ссылка скопирована ✓">Скопировать</button>
+        <button type="button" class="btn btn--ghost btn--sm" data-share="https://china-calculator.online/?ref=AGENT01" data-title="Доставка из Китая — Ulan Express">Поделиться</button>
+      </div>
+    </div>
+    <p class="note note--violet">Размер комиссии уточняйте у менеджера. Все заявки клиентов, пришедших по вашей ссылке, автоматически отмечаются вашим кодом.</p>
+
+    <form class="panel" id="agentForm" novalidate data-demo="Демо: заявка агента уйдёт менеджеру в Telegram" style="margin-top:14px">
+      <h3 class="h3">Заявка на партнёрство</h3>
+      <div class="grid-2 grid-2--stack">
+        <label class="field"><span class="field__label">Имя <span class="req">*</span></span><input class="field__input" type="text" name="name" required autocomplete="given-name"></label>
+        <label class="field"><span class="field__label">Телефон <span class="req">*</span></span><input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" required autocomplete="tel"></label>
+      </div>
+      <div class="grid-2">
+        <label class="field"><span class="field__label">Город</span><input class="field__input" type="text" name="city" placeholder="Москва" autocomplete="address-level2"></label>
+        <label class="field"><span class="field__label">Мессенджер</span>
+          <span class="select"><select class="field__input" name="messenger"><option>Telegram</option><option>WhatsApp</option><option>WeChat</option></select></span>
+        </label>
+      </div>
+      <label class="field"><span class="field__label">Откуда планируете приводить клиентов</span><textarea class="field__input" rows="3" name="source" placeholder="Свой канал, чат селлеров, знакомые предприниматели…"></textarea></label>
+      <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на <a href="#" data-toast="Демо: откроется согласие на обработку ПДн">обработку персональных данных</a></span></label>
+      <button type="submit" class="btn btn--neon btn--block btn--lg">Стать агентом</button>
+    </form>
+  </section>
+
+  <!-- ============ СОВМЕСТНЫЕ ЗАКУПКИ ============ -->
+  <section class="container section" id="groups">
+    <div class="section__head">
+      <span class="eyebrow">Совместные закупки · 拼货</span>
+      <h2 class="h2">Закупайте вместе — платите меньше</h2>
+      <p class="muted">Объединяйтесь с другими покупателями в Telegram-группах: вместе проще набрать минимальную партию у поставщика и дешевле доставить груз.</p>
+    </div>
+    <div class="groups">
+      <article class="group">
+        <div class="group__head"><b class="cat__letter">A</b><div><b>Бытовые товары и инструменты</b><small>小百 · посуда, хозтовары, игрушки</small></div></div>
+        <p>Совместные заказы товаров для дома, инструментов, канцтоваров и игрушек.</p>
+        <div class="group__acts">
+          <a href="#" class="btn btn--neon" data-toast="Демо: откроется Telegram-группа категории А">Перейти в группу</a>
+          <button type="button" class="btn btn--ghost" data-copy="https://t.me/+ulan_group_A" data-copied="Ссылка на группу скопирована ✓">Скопировать</button>
+          <button type="button" class="btn btn--ghost" data-share="https://t.me/+ulan_group_A" data-title="Совместные закупки — бытовые товары">Поделиться</button>
+        </div>
+      </article>
+      <article class="group">
+        <div class="group__head"><b class="cat__letter">Б</b><div><b>Электроника, мебель, текстиль</b><small>大百 · гаджеты, мебель, бельё</small></div></div>
+        <p>Электроника, аксессуары, мебель, постельное бельё, сумки и чемоданы.</p>
+        <div class="group__acts">
+          <a href="#" class="btn btn--neon" data-toast="Демо: откроется Telegram-группа категории Б">Перейти в группу</a>
+          <button type="button" class="btn btn--ghost" data-copy="https://t.me/+ulan_group_B" data-copied="Ссылка на группу скопирована ✓">Скопировать</button>
+          <button type="button" class="btn btn--ghost" data-share="https://t.me/+ulan_group_B" data-title="Совместные закупки — электроника и мебель">Поделиться</button>
+        </div>
+      </article>
+      <article class="group">
+        <div class="group__head"><b class="cat__letter">В</b><div><b>Одежда и обувь</b><small>服装/鞋 · для магазинов и маркетплейсов</small></div></div>
+        <p>Одежда, обувь и аксессуары — собираем партии под размерные ряды.</p>
+        <div class="group__acts">
+          <a href="#" class="btn btn--neon" data-toast="Демо: откроется Telegram-группа категории В">Перейти в группу</a>
+          <button type="button" class="btn btn--ghost" data-copy="https://t.me/+ulan_group_V" data-copied="Ссылка на группу скопирована ✓">Скопировать</button>
+          <button type="button" class="btn btn--ghost" data-share="https://t.me/+ulan_group_V" data-title="Совместные закупки — одежда и обувь">Поделиться</button>
+        </div>
+      </article>
+    </div>
+    <p class="muted small" style="margin-top:12px">Группы, описания и ссылки редактируются в админ-панели — можно добавить сколько угодно категорий.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

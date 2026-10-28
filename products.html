@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Товары из Китая в розницу и оптом — Ulan Express</title>
+  <meta name="description" content="Популярные товары из Китая с доставкой до Москвы: розничные и оптовые цены, минимальная партия.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="products">
+
+<main>
+  <section class="container page-head">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>Товары</span></nav>
+    <h1 class="h1">Товары <em>из Китая</em></h1>
+    <p class="lead">Что сейчас популярно и доступно для заказа через нас — в розницу и оптом.</p>
+  </section>
+
+  <section class="container section section--tight">
+    <p class="note note--ok" style="margin:0 0 14px">Цена включает международную доставку до Москвы. Доставка по РФ оплачивается отдельно.</p>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
+        <input class="field__input" type="search" id="productSearch" placeholder="Поиск по товарам" aria-label="Поиск по товарам">
+      </label>
+      <div class="fchips" id="productFilters" role="group" aria-label="Фильтр по категориям"></div>
+    </div>
+
+    <p class="count" id="productCount" aria-live="polite"></p>
+    <div class="pgrid" id="productGrid"></div>
+    <p class="empty" id="productEmpty" hidden>Ничего не нашли. Напишите менеджеру — найдём нужный товар у проверенных поставщиков.</p>
+
+    <p class="muted small" style="margin-top:14px">Демо-товары для макета. Реальные товары, фото и цены загружаются из админ-панели.</p>
+  </section>
+
+  <section class="container section">
+    <div class="cta">
+      <svg class="cta__bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1 4 13.5h6.5L9 23l11-13.5h-7z"/></svg>
+      <h2 class="h2">Не нашли нужное?</h2>
+      <p>Пришлите ссылку или фото товара — выкупим и доставим.</p>
+      <a href="buyout.html#us" class="btn btn--light btn--lg">Заказать выкуп</a>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

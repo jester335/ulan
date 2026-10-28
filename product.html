@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Товар — Ulan Express</title>
+  <meta name="description" content="Карточка товара: фото, розничная и оптовая цена, минимальная партия, характеристики.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="product">
+
+<main>
+  <section class="container page-head">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><a href="products.html">Товары</a><span id="crumbName">Товар</span></nav>
+  </section>
+
+  <section class="container section section--tight">
+    <div class="pview" id="productView"></div>
+  </section>
+
+  <section class="section">
+    <div class="container section__head section__head--row">
+      <div>
+        <span class="eyebrow">Ещё товары</span>
+        <h2 class="h2">Похожее</h2>
+      </div>
+      <a href="products.html" class="swipe-hint" style="color:var(--neon)">все товары →</a>
+    </div>
+    <div class="rail prail" tabindex="0" aria-label="Похожие товары" id="similar"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

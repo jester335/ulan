@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Калькулятор доставки из Китая — Ulan Express</title>
+  <meta name="description" content="Рассчитайте стоимость доставки из Китая: Карго, «белая» доставка с таможенным оформлением, контейнеры и FTL.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="calc">
+
+<main>
+  <section class="container page-head narrow">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>Калькулятор</span></nav>
+    <h1 class="h1">Калькулятор <em>доставки</em></h1>
+    <p class="lead">Предварительный расчёт в долларах. Точную стоимость подтвердит менеджер.</p>
+  </section>
+
+  <section class="container section section--tight narrow" data-tabs>
+    <div class="seg" role="tablist" aria-label="Вид доставки" style="margin-bottom:12px">
+      <button type="button" class="seg__btn is-active" data-tab="cargo" role="tab" aria-selected="true">Карго</button>
+      <button type="button" class="seg__btn" data-tab="white" role="tab" aria-selected="false">«Белая»</button>
+      <button type="button" class="seg__btn" data-tab="container" role="tab" aria-selected="false">Контейнер</button>
+    </div>
+
+    <!-- ============ КАРГО ============ -->
+    <div data-panel="cargo">
+      <form class="calc" id="cargoForm" novalidate autocomplete="off">
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">Вес, кг</span>
+            <input class="field__input" type="text" inputmode="decimal" name="weight" placeholder="например, 350" value="350">
+          </label>
+          <label class="field">
+            <span class="field__label">Объём, м³</span>
+            <input class="field__input" type="text" inputmode="decimal" name="volume" placeholder="например, 1.5" value="1.5">
+          </label>
+        </div>
+
+        <details class="helper">
+          <summary>Не знаете объём? Посчитаем по размерам коробки</summary>
+          <div class="helper__body">
+            <div class="grid-4">
+              <label class="field field--sm"><span class="field__label">Длина, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="l" placeholder="60"></label>
+              <label class="field field--sm"><span class="field__label">Ширина, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="w" placeholder="40"></label>
+              <label class="field field--sm"><span class="field__label">Высота, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="h" placeholder="40"></label>
+              <label class="field field--sm"><span class="field__label">Коробок</span><input class="field__input" type="text" inputmode="numeric" data-dim="n" placeholder="10"></label>
+            </div>
+            <button type="button" class="btn btn--ghost btn--sm" id="applyVolume">Подставить объём</button>
+            <span class="helper__out" id="volumeOut"></span>
+          </div>
+        </details>
+
+        <fieldset class="field">
+          <legend class="field__label">Категория груза</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="category" value="A" checked><span><b>A</b> Бытовое, инструменты</span></label>
+            <label class="chip"><input type="radio" name="category" value="B"><span><b>Б</b> Электроника, мебель</span></label>
+            <label class="chip"><input type="radio" name="category" value="V"><span><b>В</b> Одежда, обувь</span></label>
+            <label class="chip"><input type="radio" name="category" value="G"><span><b>Г</b> Транспорт</span></label>
+            <label class="chip chip--warn"><input type="radio" name="category" value="special"><span>Спецгруз</span></label>
+          </div>
+          <a href="#categories" class="link-sm">Что входит в категории?</a>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend class="field__label">Тип доставки</legend>
+          <div class="seg seg--sm">
+            <label class="seg__opt"><input type="radio" name="speed" value="standard" checked><span>Стандартная<small>25–30 дней</small></span></label>
+            <label class="seg__opt"><input type="radio" name="speed" value="express"><span>Быстрая 快陆<small>15–25 дней</small></span></label>
+          </div>
+        </fieldset>
+
+        <label class="field">
+          <span class="field__label">Город получения</span>
+          <span class="select">
+            <select class="field__input" name="destination">
+              <optgroup label="Москва">
+                <option value="moscow|ТЯК «Южные Ворота»">Москва — ТЯК «Южные Ворота»</option>
+                <option value="moscow|Садовод">Москва — Садовод</option>
+                <option value="moscow|ТЯК Москва">Москва — ТЯК Москва</option>
+                <option value="moscow|склад ул. Чагинская">Москва — склад ул. Чагинская</option>
+              </optgroup>
+              <optgroup label="Регионы (от 5 т, только А и Б)">
+                <option value="region|Иркутск">Иркутск</option>
+                <option value="region|Кемерово">Кемерово</option>
+                <option value="region|Новосибирск">Новосибирск</option>
+                <option value="region|Омск">Омск</option>
+                <option value="region|Челябинск">Челябинск</option>
+                <option value="region|Уфа">Уфа</option>
+                <option value="region|Казань">Казань</option>
+                <option value="region|Тольятти">Тольятти</option>
+                <option value="region|Пенза">Пенза</option>
+                <option value="region|Рязань">Рязань</option>
+              </optgroup>
+            </select>
+          </span>
+        </label>
+
+        <div class="field">
+          <label class="switch">
+            <input type="checkbox" name="insurance" id="insToggle">
+            <span class="switch__track" aria-hidden="true"></span>
+            <span>Дополнительная страховка</span>
+          </label>
+          <label class="field ins-value" id="insValue" hidden>
+            <span class="field__label">Стоимость груза, $</span>
+            <input class="field__input" type="text" inputmode="decimal" name="cargoValue" placeholder="например, 5000">
+          </label>
+        </div>
+
+        <div class="result" id="cargoResult" aria-live="polite">
+          <div class="result__rows">
+            <div class="result__row"><span>Доставка</span><b id="rShip">—</b></div>
+            <div class="result__row"><span>Страховка</span><b id="rIns">—</b></div>
+          </div>
+          <div class="result__total"><span>Итого</span><strong id="rTotal">—</strong></div>
+          <p class="result__meta" id="rMeta"></p>
+          <ul class="alerts" id="rAlerts"></ul>
+        </div>
+
+        <button type="button" class="btn btn--neon btn--block btn--lg" id="cargoSend" data-modal="Расчёт Карго" data-eyebrow="Отправить менеджеру" data-placeholder="Что за товар, когда груз будет готов">Отправить расчёт менеджеру</button>
+      </form>
+      <p class="note">Калькулятор считает только сборные грузы. Для контейнеров и FTL — вкладка «Контейнер».</p>
+    </div>
+
+    <!-- ============ БЕЛАЯ ============ -->
+    <div data-panel="white" hidden>
+      <form class="calc" id="whiteForm" novalidate autocomplete="off">
+        <p class="muted small" style="margin:0">Официальное таможенное оформление: выкуп через ВТБ Шанхай, экспорт и доставка до СВХ Москва, услуги брокера.</p>
+        <label class="field">
+          <span class="field__label">Название товара</span>
+          <input class="field__input" type="text" name="product" placeholder="например, одежда" value="одежда">
+        </label>
+        <div class="field">
+          <span class="field__label">Стоимость товара</span>
+          <div class="inline-field">
+            <input class="field__input" type="text" inputmode="decimal" name="price" placeholder="10 000" value="10000" aria-label="Стоимость товара">
+            <span class="select">
+              <select class="field__input" name="currency" aria-label="Валюта">
+                <option value="USD">USD</option><option value="CNY">CNY</option><option value="RUB">RUB</option>
+              </select>
+            </span>
+          </div>
+        </div>
+        <div class="grid-2">
+          <label class="field">
+            <span class="field__label">Вес, кг</span>
+            <input class="field__input" type="text" inputmode="decimal" name="weight" placeholder="1000" value="1000">
+          </label>
+          <label class="field">
+            <span class="field__label">Объём, м³</span>
+            <input class="field__input" type="text" inputmode="decimal" name="volume" placeholder="5" value="5">
+          </label>
+        </div>
+
+        <div class="result" id="whiteResult" aria-live="polite"></div>
+
+        <div class="note">
+          <b>Указанная сумма не включает:</b>
+          <ul>
+            <li>короткую доставку от поставщика до нашего склада в Китае;</li>
+            <li>страхование;</li>
+            <li>расходы СВХ: хранение, погрузка/разгрузка;</li>
+            <li>таможенные пошлины, НДС, таможенные сборы и прочие таможенные расходы.</li>
+          </ul>
+          Эти расходы оплачиваются по факту, получатель может оплатить их самостоятельно. Сертификация, декларации, маркировка «Честный знак» и маркировка для маркетплейсов рассчитываются отдельно.
+        </div>
+
+        <button type="button" class="btn btn--neon btn--block btn--lg" id="whiteSend" data-modal="Расчёт «Белая»" data-eyebrow="Отправить менеджеру" data-placeholder="Код ТН ВЭД (если знаете), нужны ли сертификаты">Отправить расчёт менеджеру</button>
+      </form>
+    </div>
+
+    <!-- ============ КОНТЕЙНЕРЫ / FTL ============ -->
+    <div data-panel="container" hidden>
+      <div class="stack">
+        <p class="muted" style="margin:0">Для контейнеров и FTL калькулятор не используется — подготовим индивидуальное коммерческое предложение.</p>
+
+        <div class="dl">
+          <span class="dl__ic">XLS</span>
+          <span class="dl__text"><b>Форма запроса стоимости</b><small>Заполните и пришлите нам или приложите ниже</small></span>
+          <a href="#" class="btn btn--ghost btn--sm" data-toast="Демо: скачается форма Excel из админки">Скачать</a>
+        </div>
+
+        <div class="or">или заполните на сайте</div>
+
+        <form class="panel" novalidate data-demo="Демо: заявка на контейнер с фото уйдёт менеджеру в Telegram">
+          <p class="form-sec">Груз</p>
+          <label class="field"><span class="field__label">Товар <span class="req">*</span></span><input class="field__input" type="text" name="product" placeholder="Например, мебель для офиса" required></label>
+          <label class="upload">
+            <input type="file" name="photos" accept="image/jpeg,image/png,image/webp,image/heic" multiple>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 16V7.8l-3.3 3.3-1.4-1.4L12 4l5.7 5.7-1.4 1.4L13 7.8V16zm-7 2h16v2H4z"/></svg>
+            <span data-upload-label data-default="Загрузите фото товара">Загрузите фото товара</span>
+            <small>JPG, PNG, WEBP, HEIC · до 10 файлов по 10 МБ</small>
+          </label>
+          <div class="thumbs"></div>
+          <div class="grid-2">
+            <label class="field"><span class="field__label">Код ТН ВЭД</span><input class="field__input" type="text" inputmode="numeric" name="hs" placeholder="если знаете"></label>
+            <label class="field"><span class="field__label">Материал</span><input class="field__input" type="text" name="material" placeholder="дерево, металл"></label>
+          </div>
+          <label class="field"><span class="field__label">Назначение</span><input class="field__input" type="text" name="purpose" placeholder="для чего используется товар"></label>
+          <div class="grid-2">
+            <label class="field"><span class="field__label">Вес брутто, кг</span><input class="field__input" type="text" inputmode="decimal" name="gross"></label>
+            <label class="field"><span class="field__label">Вес нетто, кг</span><input class="field__input" type="text" inputmode="decimal" name="net"></label>
+            <label class="field"><span class="field__label">Объём, м³</span><input class="field__input" type="text" inputmode="decimal" name="volume"></label>
+            <label class="field"><span class="field__label">Мест</span><input class="field__input" type="text" inputmode="numeric" name="places"></label>
+          </div>
+
+          <p class="form-sec">Перевозка</p>
+          <fieldset class="field">
+            <legend class="field__label">Тип</legend>
+            <div class="chips">
+              <label class="chip chip--plain"><input type="radio" name="ctype" value="20" checked><span>20'</span></label>
+              <label class="chip chip--plain"><input type="radio" name="ctype" value="40"><span>40'</span></label>
+              <label class="chip chip--plain"><input type="radio" name="ctype" value="40HC"><span>40' HC</span></label>
+              <label class="chip chip--plain"><input type="radio" name="ctype" value="FTL"><span>FTL (фура)</span></label>
+            </div>
+          </fieldset>
+          <div class="grid-2">
+            <label class="field"><span class="field__label">Откуда</span><input class="field__input" type="text" name="from" placeholder="город в Китае"></label>
+            <label class="field"><span class="field__label">Куда</span><input class="field__input" type="text" name="to" placeholder="город в РФ"></label>
+          </div>
+
+          <p class="form-sec">Контакты</p>
+          <div class="grid-2 grid-2--stack">
+            <label class="field"><span class="field__label">Имя <span class="req">*</span></span><input class="field__input" type="text" name="name" required autocomplete="given-name"></label>
+            <label class="field"><span class="field__label">Телефон <span class="req">*</span></span><input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" required autocomplete="tel"></label>
+          </div>
+          <label class="upload upload--sm">
+            <input type="file" name="form" accept=".xlsx,.xls,.docx,.doc,.pdf" data-max="1">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 7V3.5L18.5 9z"/></svg>
+            <span data-upload-label data-default="Приложить заполненную форму (необязательно)">Приложить заполненную форму (необязательно)</span>
+          </label>
+          <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на <a href="#" data-toast="Демо: откроется согласие на обработку ПДн">обработку персональных данных</a></span></label>
+          <button type="submit" class="btn btn--neon btn--block btn--lg">Получить индивидуальный расчёт</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ДОП. УСЛУГИ ============ -->
+  <section class="section">
+    <div class="container section__head section__head--row">
+      <div>
+        <span class="eyebrow">Дополнительно</span>
+        <h2 class="h2">Поможем с документами</h2>
+      </div>
+      <span class="swipe-hint" aria-hidden="true">листайте →</span>
+    </div>
+    <div class="rail" tabindex="0" aria-label="Дополнительные услуги">
+      <article class="svc"><span class="svc__ic">🔢</span><h3>Подбор кода ТН ВЭД</h3><p>Правильный код — без проблем на таможне</p><button class="svc__btn" type="button" data-modal="Подбор кода ТН ВЭД" data-eyebrow="Заявка на услугу" data-placeholder="Что за товар, материал, назначение">Связаться</button></article>
+      <article class="svc"><span class="svc__ic">📜</span><h3>Сертификация ЕАС</h3><p>Сертификаты и декларации соответствия</p><button class="svc__btn" type="button" data-modal="Сертификация ЕАС" data-eyebrow="Заявка на услугу" data-placeholder="Какой товар нужно сертифицировать">Связаться</button></article>
+      <article class="svc"><span class="svc__ic">📦</span><h3>Отправка образцов</h3><p>Проверьте качество до большой партии</p><button class="svc__btn" type="button" data-modal="Отправка образцов" data-eyebrow="Заявка на услугу" data-placeholder="Что за образцы, сколько штук">Связаться</button></article>
+      <article class="svc"><span class="svc__ic">🤝</span><h3>ВЭД-консультация</h3><p>Консультация и сопровождение сделки</p><button class="svc__btn" type="button" data-modal="ВЭД-консультация и сопровождение" data-eyebrow="Заявка на услугу" data-placeholder="Опишите задачу">Связаться</button></article>
+      <article class="svc"><span class="svc__ic">🏬</span><h3>Фулфилмент</h3><p>В Китае и Москве: упаковка, маркировка</p><button class="svc__btn" type="button" data-modal="Фулфилмент в Китае и Москве" data-eyebrow="Заявка на услугу" data-placeholder="Маркетплейс, объём, что нужно сделать">Связаться</button></article>
+    </div>
+  </section>
+
+  <!-- ============ КАТЕГОРИИ ============ -->
+  <section class="container section" id="categories">
+    <div class="section__head">
+      <span class="eyebrow">Категории грузов</span>
+      <h2 class="h2">Что и как возим</h2>
+    </div>
+    <div class="cats">
+      <details class="cat" open>
+        <summary><b class="cat__letter">A</b><span>Бытовые товары и инструменты<small>小百</small></span></summary>
+        <p>Слесарно-монтажные инструменты, автозапчасти, изделия из пластмассы и полимеров, товары для дома, керамика, стекло, камень, фитнес- и спортивное оборудование, косметика и гигиена, товары для маникюра, сантехника и стройматериалы, украшения для волос, канцтовары, игрушки, подшипники.</p>
+      </details>
+      <details class="cat">
+        <summary><b class="cat__letter">Б</b><span>Электроника, мебель, текстиль<small>大百</small></span></summary>
+        <p>Батарейки, косметика, шины, двигатели, электроника, сумки и чемоданы, мебель, постельное бельё, ковры, ремни, полотенца, шарфы.</p>
+      </details>
+      <details class="cat">
+        <summary><b class="cat__letter">В</b><span>Одежда и обувь<small>服装/鞋</small></span></summary>
+        <p>Одежда, обувь.</p>
+      </details>
+      <details class="cat">
+        <summary><b class="cat__letter">Г</b><span>Транспорт<small>车类</small></span></summary>
+        <p>Электромобили, самокаты, мотоциклы, трёхколёсные транспортные средства, квадроциклы.</p>
+      </details>
+    </div>
+    <p class="note">Медицина, ювелирные изделия, HDD, коммутаторы и другие спецгрузы рассчитываются менеджером индивидуально.</p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

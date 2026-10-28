@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Выкуп и оформление заказа из Китая — Ulan Express</title>
+  <meta name="description" content="Выкуп товаров с 1688, Taobao, Pinduoduo. Адрес склада в Иу и Фошане и маркировка груза для поставщика.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="buyout">
+
+<main>
+  <section class="container page-head narrow">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>Выкуп и заказ</span></nav>
+    <h1 class="h1">Выкуп и <em>заказ</em></h1>
+    <p class="lead">Покупайте у поставщика сами — дадим адрес склада и маркировку. Или пришлите ссылки — выкупим за вас.</p>
+  </section>
+
+  <section class="container section section--tight narrow">
+    <form id="clientSeg" class="field" aria-label="Тип покупки">
+      <span class="field__label">Вы покупаете</span>
+      <div class="seg seg--sm">
+        <label class="seg__opt"><input type="radio" name="client" value="retail" checked><span>В розницу<small>零售 · от 1 товара</small></span></label>
+        <label class="seg__opt"><input type="radio" name="client" value="opt"><span>Оптом<small>批发 · партии для бизнеса</small></span></label>
+      </div>
+    </form>
+  </section>
+
+  <section class="container section section--tight narrow" data-tabs>
+    <div class="seg" role="tablist" aria-label="Кто выкупает товар" style="margin-bottom:12px">
+      <button type="button" class="seg__btn is-active" data-tab="self" role="tab" aria-selected="true">Выкуп — вы</button>
+      <button type="button" class="seg__btn" data-tab="us" role="tab" aria-selected="false">Выкуп — мы</button>
+    </div>
+
+    <!-- ============ ВЫКУП — ВЫ ============ -->
+    <div data-panel="self">
+      <ol class="steps">
+        <li><b>1</b><span>Имя, телефон и склад</span></li>
+        <li><b>2</b><span>Копируете текст для поставщика</span></li>
+        <li><b>3</b><span>Вводите трек — мы принимаем груз</span></li>
+      </ol>
+
+      <form class="panel" id="markForm" novalidate>
+        <div class="grid-2 grid-2--stack">
+          <label class="field">
+            <span class="field__label">Имя <span class="req">*</span></span>
+            <input class="field__input" type="text" name="name" placeholder="Иван" autocomplete="given-name" required>
+          </label>
+          <label class="field">
+            <span class="field__label">Телефон <span class="req">*</span></span>
+            <input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" autocomplete="tel" required>
+          </label>
+        </div>
+        <fieldset class="field">
+          <legend class="field__label">Склад в Китае</legend>
+          <div class="seg seg--sm">
+            <label class="seg__opt"><input type="radio" name="wh" value="YW" checked><span>Иу<small>义乌</small></span></label>
+            <label class="seg__opt"><input type="radio" name="wh" value="FS"><span>Фошань<small>佛山</small></span></label>
+          </div>
+        </fieldset>
+        <input type="hidden" name="clientType" value="retail">
+        <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на <a href="#" data-toast="Демо: откроется согласие на обработку ПДн">обработку персональных данных</a></span></label>
+        <button type="submit" class="btn btn--neon btn--block btn--lg">Получить маркировку и адрес</button>
+
+        <div class="marking" id="marking" hidden>
+          <div class="marking__code">
+            <span>Ваша маркировка</span>
+            <strong id="markCode">—</strong>
+          </div>
+          <pre class="marking__text" id="markText"></pre>
+          <button type="button" class="btn btn--light btn--block" id="copyBtn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11z"/></svg>
+            Скопировать всё
+          </button>
+          <p class="muted small">Демо-версия: адреса складов будут подставляться из админ-панели. Маркировка сохранится в разделе «Мой заказ».</p>
+        </div>
+      </form>
+
+      <div class="track">
+        <div>
+          <h3 class="h3">Поставщик уже отправил груз?</h3>
+          <p class="muted small">Введите китайский трек-номер в разделе «Мой заказ» — команда склада получит уведомление.</p>
+        </div>
+        <a href="order.html" class="btn btn--neon">Ввести трек-номер</a>
+      </div>
+    </div>
+
+    <!-- ============ ВЫКУП — МЫ ============ -->
+    <div data-panel="us" hidden>
+      <form class="panel" novalidate data-demo="Демо: список товаров уйдёт менеджеру в Telegram">
+        <p class="muted small" style="margin:0">Добавьте ссылки на товары с 1688, Taobao, Pinduoduo или других площадок. Менеджер проверит наличие, посчитает стоимость и пришлёт счёт.</p>
+        <div class="items" id="items"></div>
+        <button type="button" class="btn btn--dashed btn--block" id="addItem">+ Добавить товар</button>
+
+        <p class="form-sec">Контакты</p>
+        <div class="grid-2 grid-2--stack">
+          <label class="field"><span class="field__label">Имя <span class="req">*</span></span><input class="field__input" type="text" name="name" required autocomplete="given-name"></label>
+          <label class="field"><span class="field__label">Телефон <span class="req">*</span></span><input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" required autocomplete="tel"></label>
+        </div>
+        <label class="field"><span class="field__label">Где удобнее ответить</span>
+          <span class="select"><select class="field__input" name="messenger"><option>Telegram</option><option>WhatsApp</option><option>WeChat</option><option>Звонок</option></select></span>
+        </label>
+        <input type="hidden" name="clientType" value="retail">
+        <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на <a href="#" data-toast="Демо: откроется согласие на обработку ПДн">обработку персональных данных</a></span></label>
+        <button type="submit" class="btn btn--neon btn--block btn--lg">Отправить заявку на выкуп</button>
+      </form>
+
+      <template id="itemTpl">
+        <div class="item">
+          <div class="item__head"><span>Товар <span class="item__num">1</span></span><button type="button" class="item__del" aria-label="Удалить товар">✕</button></div>
+          <label class="field"><span class="field__label">Ссылка на товар <span class="req">*</span></span><input class="field__input" type="url" name="link[]" placeholder="https://detail.1688.com/..." required></label>
+          <div class="grid-3">
+            <label class="field"><span class="field__label">Кол-во</span><input class="field__input" type="text" inputmode="numeric" name="qty[]" placeholder="1"></label>
+            <label class="field"><span class="field__label">Цвет</span><input class="field__input" type="text" name="color[]" placeholder="чёрный"></label>
+            <label class="field"><span class="field__label">Размер</span><input class="field__input" type="text" name="size[]" placeholder="M / 42"></label>
+          </div>
+          <label class="field"><span class="field__label">Комментарий</span><input class="field__input" type="text" name="comment[]" placeholder="Характеристики, пожелания"></label>
+          <label class="upload upload--sm">
+            <input type="file" name="photo[]" accept="image/jpeg,image/png,image/webp,image/heic" multiple data-max="3">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 16V7.8l-3.3 3.3-1.4-1.4L12 4l5.7 5.7-1.4 1.4L13 7.8V16zm-7 2h16v2H4z"/></svg>
+            <span data-upload-label data-default="Фото или скриншот (необязательно)">Фото или скриншот (необязательно)</span>
+          </label>
+          <div class="thumbs"></div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ============ МЕНЕДЖЕРЫ ============ -->
+  <section class="container section narrow">
+    <div class="section__head">
+      <span class="eyebrow">Ваш менеджер</span>
+      <h2 class="h2">Напишите напрямую</h2>
+      <p class="muted">Розничными и оптовыми заказами занимаются разные менеджеры — контакты меняются по выбору выше.</p>
+    </div>
+    <div class="mgr" data-client="retail">
+      <div class="mgr__head"><span class="avatar">Р</span><div><b>Менеджер по рознице</b><small>零售 · заказы от 1 товара</small></div></div>
+      <div class="pills">
+        <a href="https://t.me/ulanexpress_Logistics" target="_blank" rel="noopener" class="pill pill--tg">Telegram</a>
+        <a href="#" class="pill pill--wa" data-toast="Демо: WhatsApp менеджера по рознице">WhatsApp</a>
+        <a href="#" class="pill pill--wc" data-toast="Демо: WeChat менеджера по рознице">WeChat</a>
+        <a href="#" class="pill" data-toast="Демо: телефон менеджера по рознице">Позвонить</a>
+      </div>
+    </div>
+    <div class="mgr mgr--violet" data-client="opt" hidden>
+      <div class="mgr__head"><span class="avatar avatar--violet">О</span><div><b>Менеджер по опту</b><small>批发 · партии для бизнеса</small></div></div>
+      <div class="pills">
+        <a href="https://t.me/ulanexpress_Logistics" target="_blank" rel="noopener" class="pill pill--tg">Telegram</a>
+        <a href="#" class="pill pill--wa" data-toast="Демо: WhatsApp менеджера по опту">WhatsApp</a>
+        <a href="#" class="pill pill--wc" data-toast="Демо: WeChat менеджера по опту">WeChat</a>
+        <a href="#" class="pill" data-toast="Демо: телефон менеджера по опту">Позвонить</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

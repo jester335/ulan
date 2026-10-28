@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C0B">
+  <title>Мой заказ — Ulan Express</title>
+  <meta name="description" content="Статус заказа и трек-номера: найдите заказ по телефону и маркировке.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="order">
+
+<main>
+  <section class="container page-head narrow">
+    <nav class="crumbs" aria-label="Навигация"><a href="index.html">Главная</a><span>Мой заказ</span></nav>
+    <h1 class="h1">Мой <em>заказ</em></h1>
+    <p class="lead">Найдите заказ по телефону и маркировке, чтобы посмотреть статус и добавить трек-номера от поставщика.</p>
+  </section>
+
+  <section class="container section section--tight narrow">
+    <form class="panel" id="orderLookup" novalidate>
+      <div class="grid-2 grid-2--stack">
+        <label class="field"><span class="field__label">Телефон <span class="req">*</span></span><input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" required autocomplete="tel"></label>
+        <label class="field"><span class="field__label">Маркировка <span class="req">*</span></span><input class="field__input" type="text" name="mark" placeholder="YW-4567-123" required autocapitalize="characters"></label>
+      </div>
+      <button type="submit" class="btn btn--neon btn--block btn--lg">Найти заказ</button>
+      <p class="muted small" style="margin:0">Нет маркировки? Получите её в разделе <a href="buyout.html#self" class="link-sm" style="margin:0">«Выкуп — вы»</a>.</p>
+    </form>
+
+    <div class="order-card" id="orderView" hidden style="margin-top:12px">
+      <div class="order-card__head">
+        <div><span class="field__label">Маркировка</span><br><strong id="orderMark">—</strong></div>
+        <span class="status">В пути</span>
+      </div>
+      <div class="kv">
+        <div><span>Склад</span><b>Иу 义乌</b></div>
+        <div><span>Доставка</span><b>Карго, Москва</b></div>
+        <div><span>Мест</span><b>12</b></div>
+        <div><span>Вес / объём</span><b>346 кг · 1,6 м³</b></div>
+      </div>
+      <ol class="timeline">
+        <li class="is-done">Заявка оформлена<small>12.10 · маркировка выдана</small></li>
+        <li class="is-done">Принят на складе в Китае<small>18.10 · 12 мест, фото в Telegram</small></li>
+        <li class="is-now">В пути<small>отправлен 21.10 · ориентировочно 15.11</small></li>
+        <li class="is-wait">Прибыл в Москву<small>ТЯК «Южные Ворота»</small></li>
+        <li class="is-wait">Выдан</li>
+      </ol>
+
+      <div>
+        <h3 class="h3">Трек-номера поставщика</h3>
+        <ul class="tracks" id="trackList" style="margin-top:8px">
+          <li>YT2468013579<small>принят</small></li>
+          <li>SF1357924680<small>принят</small></li>
+        </ul>
+      </div>
+      <form class="track__form" id="trackForm" novalidate>
+        <label class="field" style="flex:1;min-width:0"><input class="field__input" type="text" id="trackInput" placeholder="Новый трек-номер" aria-label="Трек-номер" autocapitalize="characters"></label>
+        <button type="submit" class="btn btn--neon">Уведомить</button>
+      </form>
+      <p class="muted small" style="margin:-8px 0 0">Команда склада получит уведомление 提醒收货 и отметит, когда посылка придёт.</p>
+      <p class="note" style="margin:0">Демо-данные. В рабочей версии статусы меняет менеджер в админке, а клиент видит их здесь.</p>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

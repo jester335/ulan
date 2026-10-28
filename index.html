@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0A0C0B">
   <title>Ulan Express — доставка грузов из Китая</title>
-  <meta name="description" content="Карго и белая доставка из Китая (Иу, Фошань) в Москву и регионы РФ. Калькулятор стоимости, маркировка груза, выкуп товаров.">
+  <meta name="description" content="Карго и белая доставка из Китая (Иу, Фошань) в Москву и регионы РФ. Калькулятор стоимости, выкуп товаров, маркировка груза, товары оптом.">
   <meta property="og:title" content="Ulan Express — доставка грузов из Китая">
   <meta property="og:description" content="Рассчитайте доставку из Китая за минуту: Иу и Фошань → Москва и регионы РФ.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230A0C0B'/%3E%3Cpath d='M36 6 14 36h14l-4 22 26-32H36z' fill='%237CFF2B'/%3E%3C/svg%3E">
@@ -14,50 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<!-- ============ HEADER ============ -->
-<header class="header">
-  <div class="container header__inner">
-    <a href="#" class="logo" aria-label="Ulan Express — на главную">
-      <svg class="logo__bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1 4 13.5h6.5L9 23l11-13.5h-7z"/></svg>
-      <span class="logo__text">ULAN<span>EXPRESS</span></span>
-    </a>
-
-    <nav class="nav" aria-label="Основное меню">
-      <a href="#calc">Калькулятор</a>
-      <a href="#order">Отправить груз</a>
-      <a href="#buyout">Выкуп</a>
-      <a href="#trip">Поездка в Китай</a>
-      <a href="#about">О компании</a>
-    </nav>
-
-    <div class="header__actions">
-      <div class="lang" role="group" aria-label="Язык сайта">
-        <button class="lang__btn" data-lang="zh" type="button">中文</button>
-        <span class="lang__sep" aria-hidden="true"></span>
-        <button class="lang__btn is-active" data-lang="ru" type="button">RU</button>
-      </div>
-      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="drawer">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- Mobile drawer -->
-<div class="drawer" id="drawer" hidden>
-  <nav class="drawer__nav" aria-label="Мобильное меню">
-    <a href="#calc">Калькулятор доставки</a>
-    <a href="#order">Отправить груз</a>
-    <a href="#track">Мой заказ / трек-номер</a>
-    <a href="#buyout">Выкуп товара</a>
-    <a href="#trip">Поездка в Китай</a>
-    <a href="#about">О компании</a>
-    <a href="#contacts">Контакты</a>
-  </nav>
-  <a class="btn btn--neon btn--block" href="https://t.me/ulanexpress_Logistics" target="_blank" rel="noopener">Написать в Telegram</a>
-</div>
+<body data-page="home">
 
 <main>
 
@@ -76,14 +33,13 @@
       <div class="hero__content">
         <span class="badge"><i class="dot"></i>Иу · Фошань → Москва и регионы РФ</span>
         <h1 class="hero__title">Доставка<br>из Китая <em>без головной боли</em></h1>
-        <p class="hero__lead">Карго и «белая» доставка, выкуп товаров с 1688 и Taobao, маркировка груза онлайн.</p>
+        <p class="hero__lead">Карго и «белая» доставка, выкуп товаров с 1688 и Taobao, контейнеры и товары оптом.</p>
         <div class="hero__cta">
-          <a href="#calc" class="btn btn--neon">Рассчитать стоимость</a>
-          <a href="#order" class="btn btn--ghost">Отправить груз</a>
+          <a href="calc.html" class="btn btn--neon">Рассчитать стоимость</a>
+          <a href="buyout.html" class="btn btn--ghost">Выкуп и заказ</a>
         </div>
       </div>
 
-      <!-- Box illustration -->
       <div class="hero__art" aria-hidden="true">
         <svg viewBox="0 0 220 200" class="box">
           <defs>
@@ -105,39 +61,37 @@
       </div>
     </div>
 
-    <!-- Tip of the day -->
     <div class="tip" aria-live="polite">
       <span class="tip__label">Совет дня</span>
       <span class="tip__text" id="tipText">Плотность от 100 кг/м³ — считаем по весу, меньше — по объёму</span>
     </div>
 
-    <!-- Quick tiles -->
     <div class="tiles">
-      <a href="#warehouses" class="tile">
+      <a href="buyout.html#self" class="tile">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-        <span>Адреса складов</span>
+        <span>Адрес склада</span>
       </a>
-      <a href="#categories" class="tile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>
-        <span>Категории грузов</span>
+      <a href="calc.html#container" class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h20v12H2zm2 2v8h2V8zm4 0v8h2V8zm4 0v8h2V8zm4 0v8h2V8z"/></svg>
+        <span>Контейнеры</span>
       </a>
-      <a href="#calc" class="tile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zm-2 8h14v10H5zm2 2v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z"/></svg>
-        <span>Тарифы и сроки</span>
+      <a href="agents.html#groups" class="tile">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM1 20c0-3.3 3.6-6 8-6s8 2.7 8 6v1H1zm17.5 1v-1c0-1.9-.8-3.6-2.2-4.9 3.5.3 6.7 2.1 6.7 4.9v1z"/></svg>
+        <span>Совместные закупки</span>
       </a>
-      <a href="#track" class="tile">
+      <a href="order.html" class="tile">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg>
-        <span>Ввести трек</span>
+        <span>Мой заказ</span>
       </a>
     </div>
   </section>
 
-  <!-- ============ BENTO: main services ============ -->
+  <!-- ============ BENTO: 4 раздела меню ============ -->
   <section class="container section">
     <div class="bento">
-      <a href="#calc" class="card card--violet card--tall">
+      <a href="calc.html" class="card card--violet card--tall">
         <h2 class="card__title">Рассчитать<br>доставку</h2>
-        <p class="card__text">Карго и «белая» — цена за минуту</p>
+        <p class="card__text">Карго, «белая» и контейнеры — цена за минуту</p>
         <div class="card__art kettle" aria-hidden="true">
           <svg viewBox="0 0 120 120">
             <defs><linearGradient id="kg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#F2F2F2"/><stop offset=".55" stop-color="#9DA3A8"/><stop offset="1" stop-color="#4C5257"/></linearGradient></defs>
@@ -149,9 +103,9 @@
         <span class="card__arrow" aria-hidden="true">→</span>
       </a>
 
-      <a href="#order" class="card card--neon">
-        <h2 class="card__title">Отправить<br>груз</h2>
-        <p class="card__text">Маркировка и адрес склада для поставщика</p>
+      <a href="buyout.html" class="card card--neon">
+        <h2 class="card__title">Выкуп<br>и заказ</h2>
+        <p class="card__text">Выкупите сами или поручите нам</p>
         <div class="card__art pin" aria-hidden="true">
           <svg viewBox="0 0 120 90">
             <path d="M6 70 C30 50 40 80 62 58 S96 30 114 40" fill="none" stroke="#0A0C0B" stroke-width="3" stroke-dasharray="6 6" opacity=".55"/>
@@ -163,16 +117,16 @@
         <span class="card__arrow" aria-hidden="true">→</span>
       </a>
 
-      <a href="#buyout" class="card card--dark">
-        <h2 class="card__title">Выкуп<br>товара</h2>
-        <p class="card__text">Розница и опт с 1688, Taobao, Pinduoduo</p>
+      <a href="products.html" class="card card--dark">
+        <h2 class="card__title">Товары</h2>
+        <p class="card__text">Популярное из Китая в розницу и оптом</p>
         <div class="chips-mini" aria-hidden="true"><span>零售</span><span>批发</span></div>
         <span class="card__arrow" aria-hidden="true">→</span>
       </a>
 
-      <a href="#trip" class="card card--container">
-        <h2 class="card__title">Поездка<br>в Китай</h2>
-        <p class="card__text">Визы, WeChat, SIM, переводчик</p>
+      <a href="agents.html" class="card card--container">
+        <h2 class="card__title">Агентам и<br>совместные закупки</h2>
+        <p class="card__text">Приводите клиентов и получайте процент. Объединяйтесь в группы 拼货</p>
         <div class="card__art plane" aria-hidden="true">
           <svg viewBox="0 0 120 80">
             <path d="M8 52 112 14c4-1 7 3 4 6L76 52l-6 22-10-16-22 6z" fill="#0A0C0B" opacity=".9"/>
@@ -184,286 +138,88 @@
     </div>
   </section>
 
-  <!-- ============ CALCULATOR ============ -->
-  <section class="container section" id="calc">
+  <!-- ============ КАРГО ИЛИ БЕЛАЯ ============ -->
+  <section class="container section">
     <div class="section__head">
-      <span class="eyebrow">Калькулятор</span>
-      <h2 class="h2">Сколько стоит доставка?</h2>
-      <p class="muted">Предварительный расчёт в долларах. Точную стоимость подтвердит менеджер.</p>
+      <span class="eyebrow">Способы доставки</span>
+      <h2 class="h2">Карго или «белая»?</h2>
+      <p class="muted">Посчитайте оба варианта в калькуляторе — менеджер поможет выбрать.</p>
     </div>
-
-    <form class="calc" id="calcForm" novalidate autocomplete="off">
-      <div class="seg" role="tablist" aria-label="Вид доставки">
-        <button type="button" class="seg__btn is-active" data-mode="cargo" role="tab" aria-selected="true">Карго</button>
-        <button type="button" class="seg__btn" data-mode="white" role="tab" aria-selected="false">«Белая»</button>
-      </div>
-
-      <div class="grid-2">
-        <label class="field">
-          <span class="field__label">Вес, кг</span>
-          <input class="field__input" type="text" inputmode="decimal" name="weight" placeholder="например, 350" value="350">
-        </label>
-        <label class="field">
-          <span class="field__label">Объём, м³</span>
-          <input class="field__input" type="text" inputmode="decimal" name="volume" placeholder="например, 1.5" value="1.5">
-        </label>
-      </div>
-
-      <details class="helper">
-        <summary>Не знаете объём? Посчитаем по размерам коробки</summary>
-        <div class="helper__body">
-          <div class="grid-4">
-            <label class="field field--sm"><span class="field__label">Длина, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="l" placeholder="60"></label>
-            <label class="field field--sm"><span class="field__label">Ширина, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="w" placeholder="40"></label>
-            <label class="field field--sm"><span class="field__label">Высота, см</span><input class="field__input" type="text" inputmode="decimal" data-dim="h" placeholder="40"></label>
-            <label class="field field--sm"><span class="field__label">Коробок</span><input class="field__input" type="text" inputmode="numeric" data-dim="n" placeholder="10"></label>
-          </div>
-          <button type="button" class="btn btn--ghost btn--sm" id="applyVolume">Подставить объём</button>
-          <span class="helper__out" id="volumeOut"></span>
-        </div>
-      </details>
-
-      <fieldset class="field">
-        <legend class="field__label">Категория груза</legend>
-        <div class="chips" id="catChips">
-          <label class="chip"><input type="radio" name="category" value="A" checked><span><b>A</b> Бытовое, инструменты</span></label>
-          <label class="chip"><input type="radio" name="category" value="B"><span><b>Б</b> Электроника, мебель</span></label>
-          <label class="chip"><input type="radio" name="category" value="V"><span><b>В</b> Одежда, обувь</span></label>
-          <label class="chip"><input type="radio" name="category" value="G"><span><b>Г</b> Транспорт</span></label>
-          <label class="chip chip--warn"><input type="radio" name="category" value="special"><span>Спецгруз</span></label>
-        </div>
-        <a href="#categories" class="link-sm">Что входит в категории?</a>
-      </fieldset>
-
-      <fieldset class="field">
-        <legend class="field__label">Тип доставки</legend>
-        <div class="seg seg--sm">
-          <label class="seg__opt"><input type="radio" name="speed" value="standard" checked><span>Стандартная<small>25–30 дней</small></span></label>
-          <label class="seg__opt"><input type="radio" name="speed" value="express"><span>Быстрая 快陆<small>15–25 дней</small></span></label>
-        </div>
-      </fieldset>
-
-      <label class="field">
-        <span class="field__label">Город получения</span>
-        <span class="select">
-          <select class="field__input" name="destination">
-            <optgroup label="Москва">
-              <option value="moscow|ТЯК «Южные Ворота»">Москва — ТЯК «Южные Ворота»</option>
-              <option value="moscow|Садовод">Москва — Садовод</option>
-              <option value="moscow|ТЯК Москва">Москва — ТЯК Москва</option>
-              <option value="moscow|склад ул. Чагинская">Москва — склад ул. Чагинская</option>
-            </optgroup>
-            <optgroup label="Регионы (от 5 т, только А и Б)">
-              <option value="region|Иркутск">Иркутск</option>
-              <option value="region|Кемерово">Кемерово</option>
-              <option value="region|Новосибирск">Новосибирск</option>
-              <option value="region|Омск">Омск</option>
-              <option value="region|Челябинск">Челябинск</option>
-              <option value="region|Уфа">Уфа</option>
-              <option value="region|Казань">Казань</option>
-              <option value="region|Тольятти">Тольятти</option>
-              <option value="region|Пенза">Пенза</option>
-              <option value="region|Рязань">Рязань</option>
-            </optgroup>
-          </select>
-        </span>
-      </label>
-
-      <div class="field">
-        <label class="switch">
-          <input type="checkbox" name="insurance" id="insToggle">
-          <span class="switch__track" aria-hidden="true"></span>
-          <span>Дополнительная страховка</span>
-        </label>
-        <label class="field ins-value" id="insValue" hidden>
-          <span class="field__label">Стоимость груза, $</span>
-          <input class="field__input" type="text" inputmode="decimal" name="cargoValue" placeholder="например, 5000">
-        </label>
-      </div>
-
-      <!-- Result -->
-      <div class="result" id="result" aria-live="polite">
-        <div class="result__rows">
-          <div class="result__row"><span>Доставка</span><b id="rShip">—</b></div>
-          <div class="result__row"><span>Страховка</span><b id="rIns">—</b></div>
-        </div>
-        <div class="result__total"><span>Итого</span><strong id="rTotal">—</strong></div>
-        <p class="result__meta" id="rMeta"></p>
-        <ul class="alerts" id="rAlerts"></ul>
-      </div>
-
-      <button type="button" class="btn btn--neon btn--block btn--lg" data-toast="Демо: заявка с расчётом уйдёт менеджеру в Telegram">Отправить расчёт менеджеру</button>
-    </form>
-  </section>
-
-  <!-- ============ ORDER / MARKING ============ -->
-  <section class="container section" id="order">
-    <div class="section__head">
-      <span class="eyebrow">Отправить груз</span>
-      <h2 class="h2">Маркировка за&nbsp;10&nbsp;секунд</h2>
-      <p class="muted">Получите уникальную маркировку (唛头) и готовый текст для поставщика — скопируйте и отправьте в 1688 или Taobao.</p>
-    </div>
-
-    <ol class="steps">
-      <li><b>1</b><span>Имя, телефон и склад</span></li>
-      <li><b>2</b><span>Копируете текст для поставщика</span></li>
-      <li><b>3</b><span>Вводите трек — мы принимаем груз</span></li>
-    </ol>
-
-    <form class="panel" id="markForm" novalidate>
-      <div class="grid-2 grid-2--stack">
-        <label class="field">
-          <span class="field__label">Имя</span>
-          <input class="field__input" type="text" name="name" placeholder="Иван" autocomplete="given-name">
-        </label>
-        <label class="field">
-          <span class="field__label">Телефон</span>
-          <input class="field__input" type="tel" name="phone" placeholder="+7 999 123-45-67" autocomplete="tel">
-        </label>
-      </div>
-      <fieldset class="field">
-        <legend class="field__label">Склад в Китае</legend>
-        <div class="seg seg--sm">
-          <label class="seg__opt"><input type="radio" name="wh" value="YW" checked><span>Иу<small>义乌</small></span></label>
-          <label class="seg__opt"><input type="radio" name="wh" value="FS"><span>Фошань<small>佛山</small></span></label>
-        </div>
-      </fieldset>
-      <button type="submit" class="btn btn--neon btn--block btn--lg">Получить маркировку</button>
-
-      <div class="marking" id="marking" hidden>
-        <div class="marking__code">
-          <span>Ваша маркировка</span>
-          <strong id="markCode">—</strong>
-        </div>
-        <pre class="marking__text" id="markText"></pre>
-        <button type="button" class="btn btn--light btn--block" id="copyBtn">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11z"/></svg>
-          Скопировать всё
-        </button>
-        <p class="muted small">Демо-версия: адреса складов будут подставляться из админ-панели.</p>
-      </div>
-    </form>
-
-    <div class="track" id="track">
-      <div>
-        <h3 class="h3">Уже отправили груз?</h3>
-        <p class="muted small">Введите китайский трек-номер — команда получит уведомление.</p>
-      </div>
-      <div class="track__form">
-        <input class="field__input" type="text" placeholder="Трек-номер, напр. YT1234567890" aria-label="Трек-номер">
-        <button type="button" class="btn btn--neon" data-toast="Демо: уведомление 提醒收货 уйдёт команде в Telegram">Уведомить</button>
-      </div>
-      <a href="#" class="link-sm">Отследить груз на сайте трекинга →</a>
+    <div class="compare">
+      <article class="cmp">
+        <div class="cmp__top"><h3 class="h3">Карго</h3><span class="cmp__price">от $1/кг</span></div>
+        <ul>
+          <li>Быстро и недорого для сборных грузов</li>
+          <li>Москва и 10 городов РФ</li>
+          <li>Бесплатно до двери от 7 т или 30 м³</li>
+          <li>Срок 15–30 дней</li>
+        </ul>
+        <a href="calc.html#cargo" class="btn btn--neon btn--block">Рассчитать Карго</a>
+      </article>
+      <article class="cmp cmp--white">
+        <div class="cmp__top"><h3 class="h3">«Белая»</h3><span class="cmp__price">с документами</span></div>
+        <ul>
+          <li>Официальное таможенное оформление</li>
+          <li>Выкуп через ВТБ Шанхай</li>
+          <li>Для маркетплейсов и юрлиц</li>
+          <li>До СВХ Москва</li>
+        </ul>
+        <a href="calc.html#white" class="btn btn--ghost btn--block">Рассчитать «Белую»</a>
+      </article>
     </div>
   </section>
 
-  <!-- ============ CATEGORIES ============ -->
-  <section class="container section" id="categories">
-    <div class="section__head">
-      <span class="eyebrow">Категории грузов</span>
-      <h2 class="h2">Что и как возим</h2>
-    </div>
-
-    <div class="cats">
-      <details class="cat" open>
-        <summary><b class="cat__letter">A</b><span>Бытовые товары и инструменты<small>小百</small></span></summary>
-        <p>Слесарно-монтажные инструменты, автозапчасти, изделия из пластмассы и полимеров, товары для дома, керамика, стекло, камень, фитнес- и спортивное оборудование, косметика и гигиена, товары для маникюра, сантехника и стройматериалы, украшения для волос, канцтовары, игрушки, подшипники.</p>
-      </details>
-      <details class="cat">
-        <summary><b class="cat__letter">Б</b><span>Электроника, мебель, текстиль<small>大百</small></span></summary>
-        <p>Батарейки, косметика, шины, двигатели, электроника, сумки и чемоданы, мебель, постельное бельё, ковры, ремни, полотенца, шарфы.</p>
-      </details>
-      <details class="cat">
-        <summary><b class="cat__letter">В</b><span>Одежда и обувь<small>服装/鞋</small></span></summary>
-        <p>Одежда, обувь.</p>
-      </details>
-      <details class="cat">
-        <summary><b class="cat__letter">Г</b><span>Транспорт<small>车类</small></span></summary>
-        <p>Электромобили, самокаты, мотоциклы, трёхколёсные транспортные средства, квадроциклы.</p>
-      </details>
-    </div>
-    <p class="note">Медицина, ювелирные изделия, HDD, коммутаторы и другие спецгрузы рассчитываются менеджером индивидуально.</p>
-  </section>
-
-  <!-- ============ BUYOUT ============ -->
-  <section class="container section" id="buyout">
-    <div class="buyout">
-      <div class="buyout__text">
-        <span class="eyebrow">Выкуп товара</span>
-        <h2 class="h2">Купим в Китае за&nbsp;вас</h2>
-        <p class="muted">Пришлите ссылки на товары — оператор посчитает стоимость и оформит заказ.</p>
-      </div>
-      <div class="buyout__modes">
-        <a href="#" class="mode" data-toast="Демо: откроется форма для розницы (Оператор А)">
-          <span class="mode__zh">零售</span>
-          <strong>Розница</strong>
-          <small>от 1 товара</small>
-        </a>
-        <a href="#" class="mode mode--alt" data-toast="Демо: откроется форма для опта (Оператор Б)">
-          <span class="mode__zh">批发</span>
-          <strong>Опт</strong>
-          <small>партии для бизнеса</small>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ TRIP / SERVICES ============ -->
-  <section class="section" id="trip">
+  <!-- ============ ПОПУЛЯРНЫЕ ТОВАРЫ ============ -->
+  <section class="section">
     <div class="container section__head section__head--row">
       <div>
-        <span class="eyebrow">Поездка в Китай</span>
-        <h2 class="h2">Поможем на месте</h2>
+        <span class="eyebrow">Товары</span>
+        <h2 class="h2">Популярное сейчас</h2>
       </div>
-      <span class="swipe-hint" aria-hidden="true">листайте →</span>
+      <a href="products.html" class="swipe-hint" style="color:var(--neon)">все товары →</a>
     </div>
+    <div class="rail prail" tabindex="0" aria-label="Популярные товары" data-products="popular"></div>
+    <div class="container"><p class="note note--ok">Цена включает международную доставку до Москвы. Доставка по РФ оплачивается отдельно.</p></div>
+  </section>
 
-    <div class="rail" tabindex="0" aria-label="Список услуг">
-      <article class="svc"><span class="svc__ic">✈️</span><h3>Авиабилеты</h3><p>Подберём и оформим перелёт</p><button class="svc__btn" data-service="Авиабилеты">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">📶</span><h3>Китайская SIM</h3><p>Связь и интернет с первого дня</p><button class="svc__btn" data-service="SIM-карта">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">💱</span><h3>Обмен валюты</h3><p>Пополнение WeChat / Alipay</p><button class="svc__btn" data-service="Обмен валюты">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">💬</span><h3>WeChat и Alipay</h3><p>Помощь с регистрацией</p><button class="svc__btn" data-service="Регистрация WeChat / Alipay">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🏢</span><h3>Компания в Китае</h3><p>Регистрация под ключ</p><button class="svc__btn" data-service="Регистрация компании">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🛂</span><h3>Рабочая виза</h3><p>Оформление документов</p><button class="svc__btn" data-service="Рабочая виза">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🛒</span><h3>Аккаунты WB / Ozon</h3><p>Аренда магазинов</p><button class="svc__btn" data-service="Аренда аккаунтов WB / Ozon">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🗣️</span><h3>Переводчик</h3><p>И встреча в аэропорту</p><button class="svc__btn" data-service="Переводчик">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🏨</span><h3>Отели</h3><p>Бронирование по всему Китаю</p><button class="svc__btn" data-service="Бронирование отелей">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🏯</span><h3>Туризм</h3><p>Экскурсии и маршруты</p><button class="svc__btn" data-service="Туристические услуги">Связаться</button></article>
-      <article class="svc"><span class="svc__ic">🩺</span><h3>Медицина</h3><p>Сопровождение в клиниках</p><button class="svc__btn" data-service="Медицинское сопровождение">Связаться</button></article>
+  <!-- ============ ВЫКУП ============ -->
+  <section class="container section">
+    <div class="buyout">
+      <div class="buyout__text">
+        <span class="eyebrow">Выкуп и оформление заказа</span>
+        <h2 class="h2">Как вам удобнее?</h2>
+        <p class="muted">Покупайте у поставщика сами — дадим адрес склада и маркировку. Или пришлите ссылки — купим за вас.</p>
+      </div>
+      <div class="buyout__modes">
+        <a href="buyout.html#self" class="mode">
+          <span class="mode__zh">唛头</span>
+          <strong>Выкуп — вы</strong>
+          <small>адрес склада и маркировка</small>
+        </a>
+        <a href="buyout.html#us" class="mode mode--alt">
+          <span class="mode__zh">代购</span>
+          <strong>Выкуп — мы</strong>
+          <small>пришлите ссылки на товары</small>
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- ============ ABOUT / TRUST ============ -->
-  <section class="container section" id="about">
-    <div class="section__head">
-      <span class="eyebrow">О компании</span>
-      <h2 class="h2">Нам доверяют груз</h2>
+  <!-- ============ О КОМПАНИИ (кратко) ============ -->
+  <section class="container section">
+    <div class="section__head section__head--row">
+      <div>
+        <span class="eyebrow">О компании</span>
+        <h2 class="h2">Нам доверяют груз</h2>
+      </div>
+      <a href="about.html" class="swipe-hint" style="color:var(--neon)">подробнее →</a>
     </div>
-
     <div class="stats">
       <div class="stat"><b>2</b><span>склада в Китае: Иу и Фошань</span></div>
       <div class="stat"><b>15–30</b><span>дней до Москвы</span></div>
       <div class="stat"><b>$1</b><span>за кг — стартовый тариф</span></div>
       <div class="stat"><b>11</b><span>городов получения в РФ</span></div>
     </div>
-
-    <div class="trust">
-      <a href="#" class="video" data-toast="Демо: здесь откроется видео с VK Видео">
-        <span class="video__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        <span class="video__label">Видео со склада в Иу</span>
-      </a>
-      <div class="license">
-        <div class="license__doc" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-          <i class="license__wm">ULAN EXPRESS</i>
-        </div>
-        <div>
-          <h3 class="h3">Свидетельство о регистрации</h3>
-          <p class="muted small">Официально зарегистрированная компания. Документ — с водяным знаком.</p>
-        </div>
-      </div>
-    </div>
-
     <div class="reviews">
       <article class="review">
         <div class="review__head"><span class="avatar">А</span><div><b>Отзыв клиента</b><small>пример размещения</small></div><span class="stars" aria-label="5 из 5">★★★★★</span></div>
@@ -476,19 +232,7 @@
     </div>
   </section>
 
-  <!-- ============ WAREHOUSES + CONTACTS ============ -->
-  <section class="container section" id="warehouses">
-    <div class="section__head">
-      <span class="eyebrow">Склады</span>
-      <h2 class="h2">Откуда и куда</h2>
-    </div>
-    <div class="wh">
-      <div class="wh__item"><span class="wh__city">Иу <small>义乌</small></span><p class="muted small">Адрес склада будет здесь</p></div>
-      <div class="wh__item"><span class="wh__city">Фошань <small>佛山</small></span><p class="muted small">Адрес склада будет здесь</p></div>
-      <div class="wh__item wh__item--ru"><span class="wh__city">Москва</span><p class="muted small">ТЯК «Южные Ворота», 19-й км МКАД</p></div>
-    </div>
-  </section>
-
+  <!-- ============ CTA ============ -->
   <section class="container section" id="contacts">
     <div class="cta">
       <svg class="cta__bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1 4 13.5h6.5L9 23l11-13.5h-7z"/></svg>
@@ -505,291 +249,6 @@
 
 </main>
 
-<footer class="footer">
-  <div class="container footer__inner">
-    <a href="#" class="logo">
-      <svg class="logo__bolt" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1 4 13.5h6.5L9 23l11-13.5h-7z"/></svg>
-      <span class="logo__text">ULAN<span>EXPRESS</span></span>
-    </a>
-    <p class="muted small">Доставка грузов из Китая в Россию. © 2026</p>
-    <a href="#" class="muted small">Политика конфиденциальности</a>
-  </div>
-</footer>
-
-<!-- Floating support -->
-<a href="https://t.me/ulanexpress_Logistics" class="fab" target="_blank" rel="noopener" aria-label="Связаться с поддержкой">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9 9 0 0 0-9 9v6a3 3 0 0 0 3 3h2v-8H5v-1a7 7 0 0 1 14 0v1h-3v8h3v1h-6v2h6a2 2 0 0 0 2-2v-9a9 9 0 0 0-9-9z"/></svg>
-</a>
-
-<!-- Bottom tab bar (mobile) -->
-<nav class="tabbar" aria-label="Быстрая навигация">
-  <a href="#" class="tabbar__item is-active">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg>
-    <span>Главная</span>
-  </a>
-  <a href="#order" class="tabbar__item">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5zM12 5.3 17.6 8 12 10.8 6.4 8zM5 9.7l6 3v6.1l-6-3.3zm8 9.1v-6.1l6-3v5.8z"/></svg>
-    <span>Груз</span>
-  </a>
-  <a href="#calc" class="tabbar__item tabbar__item--main">
-    <span class="tabbar__main">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm1 3v4h10V5zm0 7v2h2v-2zm4 0v2h2v-2zm4 0v6h2v-6zm-8 4v2h2v-2zm4 0v2h2v-2z"/></svg>
-    </span>
-    <span>Расчёт</span>
-  </a>
-  <a href="#buyout" class="tabbar__item">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5.2 4H2V2h4.6l.9 2H22l-3.4 8.6A2 2 0 0 1 16.7 14H8.1l-.9 2H19v2H4l2.4-4.8z"/></svg>
-    <span>Выкуп</span>
-  </a>
-  <a href="#contacts" class="tabbar__item">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z" transform="translate(-1 0)"/></svg>
-    <span>Связь</span>
-  </a>
-</nav>
-
-<!-- Service modal -->
-<div class="modal" id="modal" hidden>
-  <div class="modal__backdrop" data-close></div>
-  <div class="modal__sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <span class="modal__grip" aria-hidden="true"></span>
-    <button class="modal__close" type="button" aria-label="Закрыть" data-close>✕</button>
-    <span class="eyebrow">Заявка на услугу</span>
-    <h3 class="h3" id="modalTitle">Услуга</h3>
-    <form class="modal__form" novalidate>
-      <label class="field"><span class="field__label">Имя</span><input class="field__input" type="text" placeholder="Как к вам обращаться"></label>
-      <label class="field"><span class="field__label">Телефон</span><input class="field__input" type="tel" placeholder="+7 999 123-45-67"></label>
-      <label class="field"><span class="field__label">Комментарий</span><textarea class="field__input" rows="3" placeholder="Даты поездки, город, пожелания"></textarea></label>
-      <label class="consent"><input type="checkbox" checked><span>Согласен на обработку персональных данных</span></label>
-      <button type="button" class="btn btn--neon btn--block btn--lg" data-close data-toast="Демо: заявка уйдёт в Telegram">Отправить заявку</button>
-    </form>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script>
-(() => {
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-
-  /* ---------- Toast ---------- */
-  const toastEl = $('#toast');
-  let toastTimer;
-  const toast = (msg) => {
-    toastEl.textContent = msg;
-    toastEl.classList.add('is-show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('is-show'), 2600);
-  };
-  document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-toast]');
-    if (!t) return;
-    if (t.tagName === 'A') e.preventDefault();
-    toast(t.dataset.toast);
-  });
-
-  /* ---------- Drawer ---------- */
-  const burger = $('.burger'), drawer = $('#drawer');
-  const setDrawer = (open) => {
-    drawer.hidden = !open;
-    burger.setAttribute('aria-expanded', open);
-    burger.classList.toggle('is-open', open);
-    document.body.classList.toggle('no-scroll', open);
-  };
-  burger.addEventListener('click', () => setDrawer(drawer.hidden));
-  $$('#drawer a').forEach(a => a.addEventListener('click', () => setDrawer(false)));
-
-  /* ---------- Language (demo) ---------- */
-  $$('.lang__btn').forEach(b => b.addEventListener('click', () => {
-    $$('.lang__btn').forEach(x => x.classList.toggle('is-active', x === b));
-    if (b.dataset.lang === 'zh') toast('中文版本将在开发阶段上线 · Китайская версия — на этапе разработки');
-  }));
-
-  /* ---------- Tip of the day ---------- */
-  const tips = [
-    'Плотность от 100 кг/м³ — считаем по весу, меньше — по объёму',
-    'Пишите маркировку (唛头) на каждой коробке',
-    'От 7 т или 30 м³ — доставка до двери по Москве бесплатно*',
-    'Без доп. страховки компенсация при утере — $3/кг',
-    'Быстрая доставка 快陆 — 15–25 дней'
-  ];
-  let tipI = 0;
-  const tipEl = $('#tipText');
-  setInterval(() => {
-    tipEl.classList.add('is-out');
-    setTimeout(() => {
-      tipI = (tipI + 1) % tips.length;
-      tipEl.textContent = tips[tipI];
-      tipEl.classList.remove('is-out');
-    }, 300);
-  }, 4500);
-
-  /* ---------- Bottom tabbar active state ---------- */
-  const tabs = $$('.tabbar__item');
-  const sectionsForTabs = ['order', 'calc', 'buyout', 'contacts'].map(id => document.getElementById(id));
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      tabs.forEach(t => t.classList.toggle('is-active', t.getAttribute('href') === '#' + en.target.id));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sectionsForTabs.forEach(s => s && io.observe(s));
-  window.addEventListener('scroll', () => {
-    if (window.scrollY < 300) tabs.forEach((t, i) => t.classList.toggle('is-active', i === 0));
-  }, { passive: true });
-
-  /* ---------- Calculator (логика из ТЗ заказчика) ---------- */
-  const form = $('#calcForm');
-  const num = (v) => parseFloat(String(v || '').replace(',', '.').replace(/\s/g, '')) || 0;
-  const usd = (v) => '$' + v.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-  // Приложение 1: базовые цены для категории A (плотность ≥ 100)
-  const TABLE_A = [[1000, 1], [800, 1.1], [600, 1.2], [500, 1.3], [400, 1.4], [300, 1.5], [250, 1.6], [200, 1.7],
-                   [190, 1.8], [180, 1.9], [170, 2], [160, 2.1], [150, 2.2], [140, 2.3], [130, 2.4], [120, 2.5], [110, 2.6]];
-  const rateA = (d) => { for (const [min, r] of TABLE_A) if (d > min) return r; return 2.7; };
-  const KG_ADD = { A: 0, B: 0.1, V: 0.4, G: 0.5 };
-  const M3_RATE = { A: 280, B: 290, V: 320, G: 330 };
-
-  function calculate() {
-    const fd = new FormData(form);
-    const w = num(fd.get('weight')), v = num(fd.get('volume'));
-    const cat = fd.get('category'), speed = fd.get('speed');
-    const [destType, destName] = String(fd.get('destination')).split('|');
-    const hasIns = fd.get('insurance') === 'on';
-    const value = num(fd.get('cargoValue'));
-    const alerts = [];
-
-    if (cat === 'special') return { error: 'Свяжитесь с менеджером для расчёта специальных грузов (медицина, косметика, ювелирка, HDD, коммутаторы).' };
-    if (!w || !v) return { error: 'Введите вес и объём груза.' };
-
-    const density = w / v;
-    let base, method;
-    if (density >= 100) {
-      const rate = rateA(density) + KG_ADD[cat];
-      base = w * rate;
-      method = `по весу · плотность ${Math.round(density)} кг/м³ · $${rate.toFixed(2)}/кг`;
-    } else {
-      base = v * M3_RATE[cat];
-      method = `по объёму · плотность ${Math.round(density)} кг/м³ · $${M3_RATE[cat]}/м³`;
-    }
-    let ship = base;
-    if (speed === 'express') ship += w * 0.2;
-
-    if (destType === 'region') {
-      if (cat === 'V' || cat === 'G') return { error: 'Доставка в регион доступна только для категорий А и Б.' };
-      if (w < 5000) return { error: 'Минимальный вес для доставки в регион — 5000 кг.' };
-      ship += w * 0.2;
-      alerts.push({ t: 'warn', m: `Выдача груза на складе в г. ${destName}. Доставка по адресу оплачивается получателем через местную ТК.` });
-    } else {
-      if (w >= 7000 || v >= 30) alerts.push({ t: 'ok', m: 'Бесплатная доставка до двери включена (адрес в пределах 50 км от ТЯК «Южные Ворота» / 19-й км МКАД).' });
-      else alerts.push({ t: 'warn', m: 'Груз менее 7 т или 30 м³. Доставка от ТЯК «Южные Ворота» до адреса оплачивается получателем через местную ТК.' });
-    }
-
-    let ins = 0;
-    if (hasIns && value > 0) {
-      const perKg = value / w;
-      const pct = perKg < 20 ? 0.01 : perKg <= 30 ? 0.02 : 0.03;
-      ins = value * pct;
-      alerts.push({ t: 'info', m: `Страховка ${pct * 100}% от стоимости груза. Максимальная выплата — $50/кг.` });
-    } else {
-      alerts.push({ t: 'info', m: 'Без доп. страховки действует обязательное страхование: компенсация при утере — $3/кг.' });
-    }
-    return { ship, ins, total: ship + ins, method, alerts };
-  }
-
-  function render() {
-    const r = calculate();
-    const box = $('#result');
-    box.classList.toggle('is-error', !!r.error);
-    if (r.error) {
-      $('#rShip').textContent = '—'; $('#rIns').textContent = '—'; $('#rTotal').textContent = '—';
-      $('#rMeta').textContent = '';
-      $('#rAlerts').innerHTML = `<li class="alert alert--err">${r.error}</li>`;
-      return;
-    }
-    $('#rShip').textContent = usd(r.ship);
-    $('#rIns').textContent = usd(r.ins);
-    $('#rTotal').textContent = usd(r.total);
-    $('#rMeta').textContent = 'Расчёт ' + r.method;
-    $('#rAlerts').innerHTML = r.alerts.map(a => `<li class="alert alert--${a.t}">${a.m}</li>`).join('');
-  }
-
-  form.addEventListener('input', render);
-  form.addEventListener('change', render);
-
-  // Карго / Белая (демо: тарифы «Белой» появятся после согласования)
-  $$('.seg__btn', form).forEach(b => b.addEventListener('click', () => {
-    $$('.seg__btn', form).forEach(x => { x.classList.toggle('is-active', x === b); x.setAttribute('aria-selected', x === b); });
-    if (b.dataset.mode === 'white') toast('Тарифы «Белой» доставки подключим после согласования');
-  }));
-
-  // Страховка
-  $('#insToggle').addEventListener('change', (e) => { $('#insValue').hidden = !e.target.checked; });
-
-  // Помощник объёма
-  const dims = () => { const g = (k) => num($(`[data-dim="${k}"]`).value); return g('l') * g('w') * g('h') / 1e6 * (g('n') || 1); };
-  $$('[data-dim]').forEach(i => i.addEventListener('input', () => {
-    const v = dims(); $('#volumeOut').textContent = v ? `≈ ${v.toFixed(3)} м³` : '';
-  }));
-  $('#applyVolume').addEventListener('click', () => {
-    const v = dims(); if (!v) return toast('Введите размеры коробки');
-    form.volume.value = v.toFixed(3); render(); toast('Объём подставлен');
-  });
-
-  render();
-
-  /* ---------- Marking demo ---------- */
-  const WH = {
-    YW: { ru: 'Иу', zh: '浙江省义乌市 ·（地址将在后台填写）' },
-    FS: { ru: 'Фошань', zh: '广东省佛山市 ·（地址将在后台填写）' }
-  };
-  $('#markForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    const phone = String(fd.get('phone') || '').replace(/\D/g, '');
-    if (phone.length < 10) return toast('Введите номер телефона');
-    const wh = fd.get('wh');
-    const code = `${wh}-${phone.slice(-4)}-${String(Math.floor(Math.random() * 900) + 100)}`;
-    $('#markCode').textContent = code;
-    $('#markText').textContent =
-`收货地址：${WH[wh].zh}
-收货人：仓库负责人
-联系电话：+86 000 0000 0000
-唛头：${code}
-（请在每个箱子上写清楚唛头）`;
-    const box = $('#marking');
-    box.hidden = false;
-    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-
-  $('#copyBtn').addEventListener('click', async () => {
-    const text = $('#markText').textContent;
-    try { await navigator.clipboard.writeText(text); }
-    catch {
-      const ta = document.createElement('textarea');
-      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
-    }
-    toast('Скопировано ✓ Отправьте текст поставщику');
-  });
-
-  /* ---------- Service modal ---------- */
-  const modal = $('#modal');
-  const openModal = (title) => {
-    $('#modalTitle').textContent = title;
-    modal.hidden = false;
-    requestAnimationFrame(() => modal.classList.add('is-open'));
-    document.body.classList.add('no-scroll');
-  };
-  const closeModal = () => {
-    modal.classList.remove('is-open');
-    document.body.classList.remove('no-scroll');
-    setTimeout(() => { modal.hidden = true; }, 250);
-  };
-  $$('.svc__btn').forEach(b => b.addEventListener('click', () => openModal(b.dataset.service)));
-  modal.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) closeModal(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
-})();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
