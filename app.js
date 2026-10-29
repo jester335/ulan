@@ -46,6 +46,12 @@
   const logo = `<a href="index.html" class="logo" aria-label="Ulan Express — на главную">${svg('bolt', 'logo__bolt')}<span class="logo__text">ULAN<span>EXPRESS</span></span></a>`;
 
   document.body.insertAdjacentHTML('afterbegin', `
+<div class="bg-fx" aria-hidden="true">
+  <i class="bg-fx__blob bg-fx__blob--a"></i><i class="bg-fx__blob bg-fx__blob--b"></i>
+  <i class="bg-fx__streak" style="--y:22%;--t:11s;--d:1.5s"></i>
+  <i class="bg-fx__streak" style="--y:55%;--t:14s;--d:5.5s"></i>
+  <i class="bg-fx__streak" style="--y:78%;--t:17s;--d:9s"></i>
+</div>
 <header class="header">
   <div class="container header__inner">
     ${logo}
@@ -75,10 +81,37 @@
 
   document.body.insertAdjacentHTML('beforeend', `
 <footer class="footer">
-  <div class="container footer__inner">
-    ${logo}
-    <nav class="footer__nav" aria-label="Разделы сайта">${NAV.map(([, h, l]) => `<a href="${h}">${l}</a>`).join('')}<a href="order.html">Мой заказ</a></nav>
-    <p class="muted small">Доставка грузов из Китая в Россию. © 2026 · <a href="#" data-toast="Демо: здесь будет политика конфиденциальности">Политика конфиденциальности</a></p>
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        ${logo}
+        <p>Доставка грузов из Китая в Россию: карго, «белая», контейнеры и выкуп товаров. Склады в Иу и Фошане.</p>
+        <div class="pills">
+          <a href="${TG}" target="_blank" rel="noopener" class="pill pill--tg">Telegram</a>
+          <a href="#" class="pill pill--wa" data-toast="Ссылка на WhatsApp появится после согласования">WhatsApp</a>
+          <a href="#" class="pill pill--wc" data-toast="Здесь будет WeChat ID">WeChat</a>
+        </div>
+      </div>
+      <nav class="footer__col" aria-label="Разделы сайта">
+        <span class="footer__title">Разделы</span>
+        ${NAV.map(([, h, l]) => `<a href="${h}">${l}</a>`).join('')}
+      </nav>
+      <nav class="footer__col" aria-label="Клиентам">
+        <span class="footer__title">Клиентам</span>
+        <a href="order.html">Мой заказ</a>
+        <a href="buyout.html#self">Адрес склада</a>
+        <a href="calc.html#container">Контейнеры</a>
+        <a href="agents.html#groups">Совместные закупки</a>
+        <a href="about.html#contacts">Контакты</a>
+      </nav>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Ulan Express</span>
+      <span class="footer__legal">
+        <a href="#" data-toast="Демо: здесь будет политика конфиденциальности">Политика конфиденциальности</a>
+        <a href="#" data-toast="Демо: здесь будет согласие на обработку ПДн">Согласие на обработку ПДн</a>
+      </span>
+    </div>
   </div>
 </footer>
 
@@ -111,6 +144,20 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>`);
+
+  /* ---------- Иконки мессенджеров (цвет берётся из класса кнопки: soc--tg, pill--wa…) ---------- */
+  const DARK = '#0A0C0B';
+  const SOCIAL = {
+    tg: `<circle cx="12" cy="12" r="10"/><path fill="${DARK}" d="M5.6 11.7 16.7 7.4c.5-.2 1 .1.8.9l-1.9 9c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.4c-.2.2-.3.3-.6.3l.2-3 5.4-4.9c.2-.2 0-.3-.3-.1l-6.7 4.2-2.9-.9c-.6-.2-.6-.6.2-.9z"/>`,
+    wa: `<path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M9.1 7.6c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.9 4.5 3.9 2.2.9 2.7.7 3.1.7.5 0 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.4-.3-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5.3-.4v-.5z"/>`,
+    wc: `<path d="M9.5 4C5.4 4 2 6.7 2 10.1c0 1.9 1 3.6 2.7 4.7L4 17l2.6-1.3c.9.3 1.9.4 2.9.4h.4a5.4 5.4 0 0 1-.2-1.5c0-3.3 3.1-6 7-6h.4C16.4 5.9 13.3 4 9.5 4z"/><circle cx="7" cy="8.7" r="1" fill="${DARK}"/><circle cx="12" cy="8.7" r="1" fill="${DARK}"/><path stroke="${DARK}" stroke-width="1.2" paint-order="stroke" d="M16.6 10c-3.3 0-5.9 2.2-5.9 4.9s2.6 4.9 5.9 4.9c.7 0 1.4-.1 2-.3l2 1-.5-1.8c1.4-.9 2.4-2.3 2.4-3.8 0-2.7-2.6-4.9-5.9-4.9z"/><circle cx="14.6" cy="14" r=".85" fill="${DARK}"/><circle cx="18.6" cy="14" r=".85" fill="${DARK}"/>`,
+    vk: `<rect x="2" y="2" width="20" height="20" rx="6"/><path fill="none" stroke="${DARK}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" d="M6 8.4c.5 4.6 2.9 7.3 6.4 7.3V8.4M12.4 12.6c2.5-.2 4.4-1.8 5.4-4.2M12.4 12.6c2.6.3 4.6 1.6 5.8 3.1"/>`,
+    ph: `<path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/>`
+  };
+  $$('.soc, .pill').forEach((el) => {
+    const key = Object.keys(SOCIAL).find((k) => el.classList.contains('soc--' + k) || el.classList.contains('pill--' + k));
+    if (key) el.insertAdjacentHTML('afterbegin', `<svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${SOCIAL[key]}</svg>`);
+  });
 
   /* ---------- Toast ---------- */
   const toastEl = $('#toast');
@@ -214,6 +261,11 @@
     if (t.dataset.toast) toast(t.dataset.toast);
   });
 
+  /* ---------- Кнопка поддержки прячется над подвалом (там есть свои контакты) ---------- */
+  const fab = $('.fab');
+  new IntersectionObserver(([en]) => fab.classList.toggle('is-hidden', en.isIntersecting))
+    .observe($('.footer'));
+
   /* ---------- Drawer ---------- */
   const burger = $('.burger'), drawer = $('#drawer');
   const setDrawer = (open) => {
@@ -237,6 +289,35 @@
     store.set('ulan_ref', ref);
     setTimeout(() => toast(`Вы пришли по ссылке агента ${ref}. Заявки будут закреплены за ним`), 700);
   }
+
+  /* ---------- Раскрывающиеся блоки: плавно; внутри [data-accordion] открыт только один ---------- */
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const toggleDetails = (d, open) => {
+    d.classList.toggle('is-open', open);
+    d._target = open;
+    const from = d.getBoundingClientRect().height; // текущая высота, даже посреди анимации
+    d._anim?.cancel();
+    if (reduceMotion) { d.open = open; d._target = undefined; return; }
+    d.open = true;
+    const borders = d.offsetHeight - d.clientHeight;
+    const to = open ? d.offsetHeight : $('summary', d).offsetHeight + borders;
+    d.style.overflow = 'hidden';
+    const anim = d.animate({ height: [`${from}px`, `${to}px`] }, { duration: 320, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+    const body = $(':scope > :not(summary)', d);
+    body?.animate({ opacity: open ? [0, 1] : [1, 0], transform: open ? ['translateY(-6px)', 'none'] : ['none', 'translateY(-6px)'] }, { duration: open ? 320 : 200, easing: 'ease' });
+    d._anim = anim;
+    anim.onfinish = () => { d.open = open; d.style.overflow = ''; d._anim = null; d._target = undefined; };
+  };
+  $$('details').forEach((d) => {
+    d.classList.toggle('is-open', d.open);
+    $('summary', d).addEventListener('click', (e) => {
+      e.preventDefault();
+      const open = !(d._target ?? d.open);
+      const group = d.closest('[data-accordion]');
+      if (open && group) $$('details', group).forEach((o) => { if (o !== d && (o._target ?? o.open)) toggleDetails(o, false); });
+      toggleDetails(d, open);
+    });
+  });
 
   /* ---------- Tabs (data-tabs > data-tab / data-panel), открытие по #hash ---------- */
   $$('[data-tabs]').forEach((scope) => {
