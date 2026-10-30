@@ -18,7 +18,7 @@
   };
 
   const PAGE = document.body.dataset.page || '';
-  const SECTION = { product: 'products' }[PAGE] || PAGE;
+  const SECTION = { product: 'products', service: 'services' }[PAGE] || PAGE;
   const TG = 'https://t.me/ulanexpress_Logistics';
 
   /* ---------- Icons ---------- */
@@ -38,6 +38,7 @@
     ['calc', 'calc.html', 'Калькулятор'],
     ['buyout', 'buyout.html', 'Выкуп и заказ'],
     ['products', 'products.html', 'Товары'],
+    ['services', 'services.html', 'Услуги'],
     ['agents', 'agents.html', 'Агентам и закупки'],
     ['about', 'about.html', 'О компании']
   ];
@@ -308,16 +309,112 @@
     d._anim = anim;
     anim.onfinish = () => { d.open = open; d.style.overflow = ''; d._anim = null; d._target = undefined; };
   };
-  $$('details').forEach((d) => {
-    d.classList.toggle('is-open', d.open);
-    $('summary', d).addEventListener('click', (e) => {
-      e.preventDefault();
-      const open = !(d._target ?? d.open);
-      const group = d.closest('[data-accordion]');
-      if (open && group) $$('details', group).forEach((o) => { if (o !== d && (o._target ?? o.open)) toggleDetails(o, false); });
-      toggleDetails(d, open);
+  $$('details[open]').forEach((d) => d.classList.add('is-open'));
+  // делегирование: работает и для блоков, которые скрипт отрисует позже (вопросы на странице услуги)
+  document.addEventListener('click', (e) => {
+    const sum = e.target.closest('details > summary');
+    if (!sum) return;
+    e.preventDefault();
+    const d = sum.parentElement;
+    const open = !(d._target ?? d.open);
+    const group = d.closest('[data-accordion]');
+    if (open && group) $$('details', group).forEach((o) => { if (o !== d && (o._target ?? o.open)) toggleDetails(o, false); });
+    toggleDetails(d, open);
+  });
+
+  /* ---------- Выпадающие списки в стиле сайта ----------
+     Настоящий <select> остаётся в форме (его выводит WordPress, из него уходят данные),
+     поверх рисуется кнопка и список. Выбор синхронизируется в select и вызывает change. */
+  let openDD = null;
+  const closeDD = (focusBtn) => {
+    if (!openDD) return;
+    const { wrap, btn, panel, backdrop } = openDD;
+    wrap.classList.remove('is-open', 'dd--up', 'dd--right');
+    btn.setAttribute('aria-expanded', 'false');
+    panel.remove(); backdrop.remove();
+    document.body.classList.remove('dd-lock');
+    if (focusBtn) btn.focus({ preventScroll: true });
+    openDD = null;
+  };
+  $$('.select > select').forEach((sel) => {
+    const wrap = sel.parentElement;
+    const label = sel.closest('.field')?.querySelector('.field__label')?.textContent.replace('*', '').trim() || sel.getAttribute('aria-label') || '';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = sel.className + ' dd__btn';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    const sync = () => {
+      const opt = sel.options[sel.selectedIndex];
+      btn.innerHTML = `<span>${esc(opt ? opt.textContent : '')}</span>`;
+      btn.setAttribute('aria-label', `${label ? label + ': ' : ''}${opt ? opt.textContent : ''}`);
+    };
+    sel.classList.add('dd-native');
+    sel.tabIndex = -1;
+    sel.setAttribute('aria-hidden', 'true');
+    wrap.insertBefore(btn, sel); // кнопка первой — клик по подписи поля открывает список
+    sel.addEventListener('change', sync);
+    sel.form?.addEventListener('reset', () => requestAnimationFrame(sync));
+    sync();
+
+    const open = () => {
+      closeDD();
+      const panel = document.createElement('div');
+      panel.className = 'dd__panel';
+      panel.setAttribute('role', 'listbox');
+      if (label) panel.setAttribute('aria-label', label);
+      let html = label ? `<div class="dd__head" aria-hidden="true">${esc(label)}</div>` : '';
+      [...sel.children].forEach((node) => {
+        const opts = node.tagName === 'OPTGROUP' ? [...node.children] : [node];
+        if (node.tagName === 'OPTGROUP') html += `<div class="dd__group" role="presentation">${esc(node.label)}</div>`;
+        opts.forEach((o) => { html += `<button type="button" class="dd__opt" role="option" data-i="${o.index}" aria-selected="${o.selected}">${esc(o.textContent)}</button>`; });
+      });
+      panel.innerHTML = html;
+      const backdrop = document.createElement('div');
+      backdrop.className = 'dd__backdrop';
+      wrap.append(backdrop, panel); // в одном слое со списком — так работает и внутри окна заявки
+      wrap.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      openDD = { wrap, btn, panel, backdrop };
+      if (matchMedia('(max-width: 639px)').matches) document.body.classList.add('dd-lock');
+      else {
+        const r = btn.getBoundingClientRect(), h = panel.offsetHeight;
+        if (r.bottom + h + 12 > innerHeight && r.top > h + 12) wrap.classList.add('dd--up');
+        if (r.left + panel.offsetWidth > document.documentElement.clientWidth - 8) wrap.classList.add('dd--right');
+      }
+      const cur = $('[aria-selected="true"]', panel) || $('.dd__opt', panel);
+      cur.focus({ preventScroll: true });
+      cur.scrollIntoView({ block: 'nearest' });
+
+      panel.addEventListener('click', (e) => {
+        const o = e.target.closest('.dd__opt');
+        if (!o) return;
+        e.preventDefault();
+        sel.selectedIndex = +o.dataset.i;
+        sel.dispatchEvent(new Event('input', { bubbles: true }));
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+        closeDD(true);
+      });
+      panel.addEventListener('keydown', (e) => {
+        const all = $$('.dd__opt', panel), i = all.indexOf(document.activeElement);
+        const go = (k) => { e.preventDefault(); all[Math.max(0, Math.min(all.length - 1, k))].focus(); };
+        if (e.key === 'ArrowDown') go(i + 1);
+        else if (e.key === 'ArrowUp') go(i - 1);
+        else if (e.key === 'Home') go(0);
+        else if (e.key === 'End') go(all.length - 1);
+        else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeDD(true); }
+        else if (e.key === 'Tab') closeDD();
+      });
+      // preventDefault: иначе клик внутри <label> снова «нажмёт» кнопку и откроет список
+      backdrop.addEventListener('click', (e) => { e.preventDefault(); closeDD(true); });
+    };
+    btn.addEventListener('click', (e) => { e.preventDefault(); openDD?.wrap === wrap ? closeDD(true) : open(); });
+    btn.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'ArrowUp'].includes(e.key)) { e.preventDefault(); open(); }
     });
   });
+  document.addEventListener('pointerdown', (e) => { if (openDD && !openDD.wrap.contains(e.target) && e.target !== openDD.backdrop) closeDD(); });
+  addEventListener('resize', () => closeDD());
 
   /* ---------- Tabs (data-tabs > data-tab / data-panel), открытие по #hash ---------- */
   $$('[data-tabs]').forEach((scope) => {
@@ -719,6 +816,178 @@
 
     const similar = PRODUCTS.filter((x) => x.id !== p.id).sort((a, b) => (b.cat === p.cat) - (a.cat === p.cat)).slice(0, 4);
     $('#similar').innerHTML = similar.map(productCard).join('');
+  }
+
+  /* ==========================================================
+     Услуги (в WordPress — тип записи «Услуга» с категориями).
+     Тексты демонстрационные — заказчик пришлёт свои.
+     ========================================================== */
+  const SCATS = { customs: 'Таможня и документы', goods: 'Товары и логистика', business: 'Бизнес в Китае', trip: 'Поездка в Китай' };
+  const SERVICES = [
+    { id: 'tnved', name: 'Подбор кода ТН ВЭД', cat: 'customs', icon: '🔢', h: 210, hot: true,
+      short: 'Правильный код — без штрафов и задержек на таможне',
+      desc: 'От кода ТН ВЭД зависят пошлина, НДС и список документов. Ошибка в коде — это доплаты, задержка груза на таможне и штрафы. Подберём код по описанию и фото товара и заранее скажем, какие документы понадобятся.',
+      includes: ['Анализ товара по описанию, фото и материалу', 'Подбор кода ТН ВЭД', 'Расчёт ставки пошлины и НДС', 'Список нужных разрешительных документов'],
+      steps: ['Присылаете описание и фото товара', 'Изучаем состав, материал и назначение', 'Подбираем код и считаем платежи', 'Отправляем заключение'],
+      faq: [['Можно ли подобрать код только по ссылке на товар?', 'Да, если на странице есть описание и характеристики. Иногда уточняем материал или назначение.'], ['Нужен ли код для доставки Карго?', 'Для Карго код не нужен. Он нужен для «белой» доставки с таможенным оформлением.']] },
+    { id: 'eac', name: 'Серти­фикация ЕАС', cat: 'customs', icon: '📜', h: 45, hot: true,
+      short: 'Сертификаты и декларации соответствия для продажи в РФ',
+      desc: 'Для продажи многих товаров в России и на маркетплейсах нужен сертификат или декларация ЕАС. Определим, какой документ нужен вашему товару, и оформим его через аккредитованную лабораторию.',
+      includes: ['Определение типа документа: сертификат или декларация', 'Подготовка пакета документов', 'Испытания в аккредитованной лаборатории', 'Регистрация документа в реестре'],
+      steps: ['Присылаете описание товара', 'Определяем нужный документ', 'Готовим документы и испытания', 'Передаём готовый сертификат'],
+      faq: [['Нужен ли сертификат для Wildberries и Ozon?', 'Для большинства категорий — да, маркетплейсы проверяют документы при загрузке товара.']] },
+    { id: 'ved', name: 'ВЭД-консультация', cat: 'customs', icon: '🤝', h: 260,
+      short: 'Консультация и сопровождение сделки с Китаем',
+      desc: 'Поможем разобраться, как выгоднее завезти товар: Карго или «белая» доставка, какие документы нужны и сколько это стоит. Сопровождаем сделку от поиска поставщика до получения груза.',
+      includes: ['Разбор вашей задачи и выбор схемы доставки', 'Расчёт полной стоимости товара с доставкой', 'Проверка документов поставщика', 'Сопровождение сделки'],
+      steps: ['Рассказываете о задаче', 'Предлагаем схему и считаем', 'Сопровождаем сделку', 'Груз у вас'],
+      faq: [['Работаете с начинающими?', 'Да. Объясним всё простыми словами и поможем с первой поставкой.']] },
+    { id: 'samples', name: 'Отправка образцов', cat: 'goods', icon: '📦', h: 30, hot: true,
+      short: 'Проверьте качество до заказа большой партии',
+      desc: 'Прежде чем заказывать партию, закажите образцы. Соберём образцы от одного или нескольких поставщиков на нашем складе и отправим вам одной посылкой.',
+      includes: ['Заказ образцов у поставщиков', 'Сбор на складе в Иу или Фошане', 'Фото образцов перед отправкой', 'Быстрая отправка в Россию'],
+      steps: ['Присылаете ссылки на товары', 'Заказываем образцы', 'Собираем и проверяем', 'Отправляем вам'],
+      faq: [['Можно собрать образцы от разных поставщиков?', 'Да, соберём всё на складе и отправим одной посылкой.']] },
+    { id: 'fulfillment', name: 'Фулфилмент', cat: 'goods', icon: '🏬', h: 120, hot: true,
+      short: 'Упаковка и маркировка для маркетплейсов в Китае и Москве',
+      desc: 'Подготовим товар к продаже на маркетплейсах: переупакуем, промаркируем и отправим на склады Wildberries и Ozon. Работаем на складах в Китае и в Москве.',
+      includes: ['Приёмка и пересчёт товара', 'Упаковка и маркировка по требованиям маркетплейсов', 'Этикетки и штрихкоды', 'Отгрузка на склады маркетплейсов'],
+      steps: ['Присылаете требования маркетплейса', 'Принимаем товар', 'Упаковываем и маркируем', 'Отгружаем'],
+      faq: [['Где удобнее делать маркировку — в Китае или в Москве?', 'В Китае обычно дешевле, в Москве — быстрее исправить ошибки. Подскажем под ваш товар.']] },
+    { id: 'company', name: 'Компания в Китае', cat: 'business', icon: '🏢', h: 280, hot: true,
+      short: 'Регистрация компании под ключ',
+      desc: 'Зарегистрируем компанию в Китае: подберём форму, подготовим документы, поможем с юридическим адресом и банковским счётом.',
+      includes: ['Выбор формы компании', 'Подготовка и подача документов', 'Юридический адрес', 'Помощь с открытием счёта'],
+      steps: ['Консультация', 'Сбор документов', 'Регистрация', 'Передача документов'],
+      faq: [['Нужно ли приезжать в Китай?', 'Зависит от формы компании и банка. Расскажем на консультации.']] },
+    { id: 'rent', name: 'Аренда помещения', cat: 'business', icon: '🏪', h: 300,
+      short: 'Магазин, офис или торговое помещение в Китае',
+      desc: 'Подберём помещение под магазин, шоурум или офис, проверим договор и поможем договориться с арендодателем.',
+      includes: ['Подбор вариантов', 'Просмотр и видеообзор', 'Проверка договора', 'Переговоры с арендодателем'],
+      steps: ['Задача и бюджет', 'Подбор', 'Просмотр', 'Договор'], faq: [] },
+    { id: 'visa', name: 'Рабочая виза', cat: 'business', icon: '🛂', h: 200,
+      short: 'Оформление документов для работы в Китае',
+      desc: 'Подскажем, какой тип визы нужен, подготовим приглашение и пакет документов.',
+      includes: ['Выбор типа визы', 'Приглашение', 'Пакет документов', 'Консультация по срокам'],
+      steps: ['Консультация', 'Документы', 'Подача', 'Виза'], faq: [] },
+    { id: 'exchange', name: 'Обмен валюты', cat: 'business', icon: '💱', h: 90,
+      short: 'Оплата поставщикам и пополнение WeChat / Alipay',
+      desc: 'Поможем оплатить поставщику в юанях и пополнить WeChat Pay или Alipay.',
+      includes: ['Оплата поставщику в юанях', 'Пополнение WeChat Pay / Alipay', 'Подтверждение платежа'],
+      steps: ['Заявка', 'Курс и сумма', 'Оплата', 'Подтверждение'], faq: [] },
+    { id: 'tickets', name: 'Авиабилеты и отели', cat: 'trip', icon: '✈️', h: 195, hot: false,
+      short: 'Подберём перелёт и проживание',
+      desc: 'Подберём удобный перелёт и гостиницу рядом с рынками и фабриками, которые вы планируете посетить.',
+      includes: ['Подбор перелёта', 'Бронирование гостиницы', 'Трансфер из аэропорта'],
+      steps: ['Даты и город', 'Варианты', 'Бронирование'], faq: [] },
+    { id: 'sim', name: 'SIM и WeChat', cat: 'trip', icon: '📶', h: 100,
+      short: 'Связь, интернет, WeChat и Alipay с первого дня',
+      desc: 'Китайская SIM-карта, регистрация и верификация WeChat и Alipay, чтобы вы были на связи и могли платить с первого дня.',
+      includes: ['Китайская SIM-карта', 'Регистрация WeChat', 'Настройка Alipay'],
+      steps: ['Заявка', 'Подготовка', 'Выдача'], faq: [] },
+    { id: 'translator', name: 'Переводчик', cat: 'trip', icon: '🗣️', h: 330, hot: true,
+      short: 'Переговоры с поставщиками и встреча в аэропорту',
+      desc: 'Русскоговорящий переводчик для переговоров, поездок на фабрики и рынки. Встретим в аэропорту и сопроводим.',
+      includes: ['Перевод на переговорах', 'Поездки на фабрики и рынки', 'Встреча в аэропорту'],
+      steps: ['Даты и задачи', 'Подбор переводчика', 'Работа'], faq: [] },
+    { id: 'tourism', name: 'Туризм', cat: 'trip', icon: '🏯', h: 15,
+      short: 'Экскурсии и маршруты по Китаю',
+      desc: 'Экскурсии и маршруты по Китаю: совместим деловую поездку с отдыхом.',
+      includes: ['Маршрут под ваши даты', 'Экскурсии', 'Сопровождение'],
+      steps: ['Пожелания', 'Маршрут', 'Поездка'], faq: [] },
+    { id: 'medical', name: 'Медицина', cat: 'trip', icon: '🩺', h: 170,
+      short: 'Сопровождение в клиниках Китая',
+      desc: 'Подберём клинику, запишем на приём и сопроводим с переводчиком.',
+      includes: ['Подбор клиники', 'Запись на приём', 'Сопровождение и перевод'],
+      steps: ['Запрос', 'Подбор клиники', 'Приём'], faq: [] }
+  ];
+  // ­ — мягкий перенос в длинных названиях: на узких экранах слово переносится по слогам
+  const plain = (s) => s.name.replace(/­/g, '');
+  const serviceAttrs = (s) => `data-modal="${esc(plain(s))}" data-eyebrow="Заявка на услугу" data-placeholder="Коротко опишите задачу"`;
+  const serviceCard = (s) => `
+<a href="service.html?id=${s.id}" class="scard" style="--h:${s.h}">
+  <span class="scard__ic" aria-hidden="true">${s.icon}</span>
+  <span class="scard__cat">${SCATS[s.cat]}</span>
+  <h3 class="scard__name">${esc(s.name)}</h3>
+  <p class="scard__text">${esc(s.short)}</p>
+  <span class="scard__more">Подробнее <span aria-hidden="true">→</span></span>
+</a>`;
+
+  // Блоки услуг на страницах: data-services="hot" | "all" | "customs,goods"
+  $$('[data-services]').forEach((el) => {
+    const f = el.dataset.services;
+    const list = f === 'all' ? SERVICES : f === 'hot' ? SERVICES.filter((s) => s.hot) : SERVICES.filter((s) => f.split(',').includes(s.cat));
+    el.innerHTML = list.map(serviceCard).join('');
+  });
+
+  const sgrid = $('#serviceGrid');
+  if (sgrid) {
+    let filter = new URLSearchParams(location.search).get('cat') || 'all';
+    let q = '';
+    const chips = $('#serviceFilters');
+    chips.innerHTML = [['all', 'Все'], ...Object.entries(SCATS)]
+      .map(([k, l]) => `<button type="button" class="fchip${k === filter ? ' is-active' : ''}" data-f="${k}" aria-pressed="${k === filter}">${l}</button>`).join('');
+    const draw = () => {
+      const list = SERVICES.filter((s) => (filter === 'all' || s.cat === filter)
+        && (plain(s) + ' ' + s.short + ' ' + SCATS[s.cat]).toLowerCase().includes(q));
+      sgrid.innerHTML = list.map(serviceCard).join('');
+      $('#serviceEmpty').hidden = list.length > 0;
+      $('#serviceCount').textContent = `${list.length} ${plural(list.length, ['услуга', 'услуги', 'услуг'])}`;
+    };
+    chips.addEventListener('click', (e) => {
+      const b = e.target.closest('.fchip');
+      if (!b) return;
+      filter = b.dataset.f;
+      $$('.fchip', chips).forEach((x) => { x.classList.toggle('is-active', x === b); x.setAttribute('aria-pressed', x === b); });
+      draw();
+    });
+    $('#serviceSearch').addEventListener('input', (e) => { q = e.target.value.trim().toLowerCase(); draw(); });
+    draw();
+  }
+
+  const sview = $('#serviceView');
+  if (sview) {
+    const id = new URLSearchParams(location.search).get('id');
+    const s = SERVICES.find((x) => x.id === id) || SERVICES[0];
+    document.title = `${plain(s)} — Ulan Express`;
+    $('#crumbName').textContent = plain(s);
+    sview.innerHTML = `
+<div class="svc-hero" style="--h:${s.h}">
+  <span class="svc-hero__ic" aria-hidden="true">${s.icon}</span>
+  <span class="eyebrow">${SCATS[s.cat]}</span>
+  <h1 class="h1 h1--sm">${esc(s.name)}</h1>
+  <p class="lead">${esc(s.short)}</p>
+  <div class="hero__cta">
+    <button type="button" class="btn btn--neon" ${serviceAttrs(s)}>Оставить заявку</button>
+    <a href="${TG}" target="_blank" rel="noopener" class="btn btn--ghost">Спросить в Telegram</a>
+  </div>
+</div>
+<div class="svc-body">
+  <div class="stack">
+    <p class="pdesc">${esc(s.desc)}</p>
+    <div class="cmp">
+      <h2 class="h3">Что входит</h2>
+      <ul>${s.includes.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+    </div>
+  </div>
+  <div class="stack">
+    <div class="cmp">
+      <h2 class="h3">Как проходит</h2>
+      <ol class="flow">${s.steps.map((x) => `<li>${esc(x)}</li>`).join('')}</ol>
+    </div>
+    <div class="kv">
+      <div><span>Срок</span><b>${esc(s.term || 'от 1 дня')}</b></div>
+      <div><span>Стоимость</span><b>${esc(s.price || 'по запросу')}</b></div>
+    </div>
+  </div>
+</div>
+${s.faq.length ? `<div class="cats faq" data-accordion>
+  <h2 class="h3">Частые вопросы</h2>
+  ${s.faq.map(([q, a]) => `<details class="cat"><summary><span>${esc(q)}</span></summary><p>${esc(a)}</p></details>`).join('')}
+</div>` : ''}`;
+    $('#similarServices').innerHTML = SERVICES.filter((x) => x.id !== s.id)
+      .sort((a, b) => (b.cat === s.cat) - (a.cat === s.cat)).slice(0, 6).map(serviceCard).join('');
+    $('#serviceCta').dataset.modal = plain(s);
   }
 
   /* ==========================================================
