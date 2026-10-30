@@ -160,6 +160,12 @@
     if (key) el.insertAdjacentHTML('afterbegin', `<svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${SOCIAL[key]}</svg>`);
   });
 
+  /* ---------- Блокировка прокрутки страницы, пока открыто меню, окно или список ---------- */
+  new MutationObserver(() => {
+    const c = document.body.classList;
+    document.documentElement.classList.toggle('is-locked', c.contains('no-scroll') || c.contains('dd-lock'));
+  }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
   /* ---------- Toast ---------- */
   const toastEl = $('#toast');
   let toastTimer;

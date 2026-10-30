@@ -82,7 +82,9 @@ body {
   12% { opacity: .85; }
   15%, 100% { transform: translate3d(-40vw, -16vw, 0) rotate(16deg); opacity: 0; }
 }
-body.no-scroll { overflow: hidden; }
+/* Блокировка прокрутки (меню, окно заявки, список) — на html, а не на body:
+   при overflow-x: clip на html скрытый overflow у body отрывает липкую шапку */
+html.is-locked { overflow: hidden; }
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -355,7 +357,6 @@ textarea.field__input { resize: vertical; font-weight: 500; }
   .dd__head::before { content: ""; display: block; width: 44px; height: 5px; margin: 0 auto 12px; border-radius: 3px; background: var(--line-2); }
   .dd__opt { min-height: 50px; font-size: 16px; white-space: normal; }
 }
-body.dd-lock { overflow: hidden; }
 select option, select optgroup { background: #1A1E1C; color: var(--text); }
 
 /* segmented */
