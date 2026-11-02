@@ -550,6 +550,8 @@ select option, select optgroup { background: #1A1E1C; color: var(--text); }
 .wh__item--ru { border-left-color: var(--violet-2); }
 .wh__city { font-family: var(--font-display); font-weight: 800; font-size: 17px; }
 .wh__city small { font-family: var(--font); color: var(--muted); font-weight: 600; font-size: 14px; margin-left: 6px; }
+.wh__addr { margin: 8px 0 4px; font-size: 14px; font-weight: 600; line-height: 1.55; color: #D5DBD7; overflow-wrap: anywhere; }
+.wh__item .muted { margin: 0; }
 
 /* ---------- CTA ---------- */
 .cta {

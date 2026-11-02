@@ -126,7 +126,7 @@
 
         <button type="button" class="btn btn--neon btn--block btn--lg" id="cargoSend" data-modal="Расчёт Карго" data-eyebrow="Отправить менеджеру" data-placeholder="Что за товар, когда груз будет готов">Отправить расчёт менеджеру</button>
       </form>
-      <p class="note">Калькулятор считает только сборные грузы. Для контейнеров и FTL — вкладка «Контейнер».</p>
+      <p class="note">Калькулятор считает только сборные грузы. Для Ж/Д контейнеров — вкладка «Контейнер».</p>
     </div>
 
     <!-- ============ БЕЛАЯ ============ -->
@@ -176,40 +176,24 @@
       </form>
     </div>
 
-    <!-- ============ КОНТЕЙНЕРЫ / FTL ============ -->
+    <!-- ============ Ж/Д КОНТЕЙНЕРЫ / FTL ============ -->
     <div data-panel="container" hidden>
       <div class="stack">
-        <p class="muted" style="margin:0">Для контейнеров и FTL калькулятор не используется — подготовим индивидуальное коммерческое предложение.</p>
+        <p class="muted" style="margin:0">Для Ж/Д контейнеров калькулятор не используется — подготовим индивидуальное коммерческое предложение по спецификации груза.</p>
 
         <div class="dl">
-          <span class="dl__ic">XLS</span>
-          <span class="dl__text"><b>Форма запроса стоимости</b><small>Заполните и пришлите нам или приложите ниже</small></span>
-          <a href="#" class="btn btn--ghost btn--sm" data-toast="Демо: скачается форма Excel из админки">Скачать</a>
+          <span class="dl__ic">XLSX</span>
+          <span class="dl__text"><b>Таблица для запроса расчёта Ж/Д контейнера</b><small>Спецификация УЛАН081 на русском и китайском. Заполните и приложите ниже или пришлите менеджеру</small></span>
+          <a href="files/ulan081-container-request.xlsx" class="btn btn--ghost btn--sm" download="УЛАН081 — запрос расчёта Ж-Д контейнера.xlsx">Скачать</a>
         </div>
 
         <div class="or">или заполните на сайте</div>
 
-        <form class="panel" novalidate data-demo="Демо: заявка на контейнер с фото уйдёт менеджеру в Telegram">
-          <p class="form-sec">Груз</p>
-          <label class="field"><span class="field__label">Товар <span class="req">*</span></span><input class="field__input" type="text" name="product" placeholder="Например, мебель для офиса" required></label>
-          <label class="upload">
-            <input type="file" name="photos" accept="image/jpeg,image/png,image/webp,image/heic" multiple>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 16V7.8l-3.3 3.3-1.4-1.4L12 4l5.7 5.7-1.4 1.4L13 7.8V16zm-7 2h16v2H4z"/></svg>
-            <span data-upload-label data-default="Загрузите фото товара">Загрузите фото товара</span>
-            <small>JPG, PNG, WEBP, HEIC · до 10 файлов по 10 МБ</small>
-          </label>
-          <div class="thumbs"></div>
-          <div class="grid-2">
-            <label class="field"><span class="field__label">Код ТН ВЭД</span><input class="field__input" type="text" inputmode="numeric" name="hs" placeholder="если знаете"></label>
-            <label class="field"><span class="field__label">Материал</span><input class="field__input" type="text" name="material" placeholder="дерево, металл"></label>
-          </div>
-          <label class="field"><span class="field__label">Назначение</span><input class="field__input" type="text" name="purpose" placeholder="для чего используется товар"></label>
-          <div class="grid-2">
-            <label class="field"><span class="field__label">Вес брутто, кг</span><input class="field__input" type="text" inputmode="decimal" name="gross"></label>
-            <label class="field"><span class="field__label">Вес нетто, кг</span><input class="field__input" type="text" inputmode="decimal" name="net"></label>
-            <label class="field"><span class="field__label">Объём, м³</span><input class="field__input" type="text" inputmode="decimal" name="volume"></label>
-            <label class="field"><span class="field__label">Мест</span><input class="field__input" type="text" inputmode="numeric" name="places"></label>
-          </div>
+        <form class="panel" novalidate data-demo="Демо: спецификация с фото уйдёт менеджеру в Telegram">
+          <p class="form-sec">Товары</p>
+          <p class="muted small" style="margin:-6px 0 0">Те же поля, что в таблице. Если товаров несколько — добавьте каждый.</p>
+          <div class="items" data-items="cItemTpl"></div>
+          <button type="button" class="btn btn--dashed btn--block" data-add-item>+ Добавить товар</button>
 
           <p class="form-sec">Перевозка</p>
           <fieldset class="field">
@@ -219,11 +203,12 @@
               <label class="chip chip--plain"><input type="radio" name="ctype" value="40"><span>40'</span></label>
               <label class="chip chip--plain"><input type="radio" name="ctype" value="40HC"><span>40' HC</span></label>
               <label class="chip chip--plain"><input type="radio" name="ctype" value="FTL"><span>FTL (фура)</span></label>
+              <label class="chip chip--plain"><input type="radio" name="ctype" value="unknown"><span>Не знаю — подскажите</span></label>
             </div>
           </fieldset>
-          <div class="grid-2">
-            <label class="field"><span class="field__label">Откуда</span><input class="field__input" type="text" name="from" placeholder="город в Китае"></label>
-            <label class="field"><span class="field__label">Куда</span><input class="field__input" type="text" name="to" placeholder="город в РФ"></label>
+          <div class="grid-2 grid-2--stack">
+            <label class="field"><span class="field__label">Место погрузки <span lang="zh">装箱地</span></span><input class="field__input" type="text" name="from" placeholder="город / адрес в Китае"></label>
+            <label class="field"><span class="field__label">Место назначения <span lang="zh">目的地</span></span><input class="field__input" type="text" name="to" placeholder="город в РФ"></label>
           </div>
 
           <p class="form-sec">Контакты</p>
@@ -234,11 +219,48 @@
           <label class="upload upload--sm">
             <input type="file" name="form" accept=".xlsx,.xls,.docx,.doc,.pdf" data-max="1">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm-1 7V3.5L18.5 9z"/></svg>
-            <span data-upload-label data-default="Приложить заполненную форму (необязательно)">Приложить заполненную форму (необязательно)</span>
+            <span data-upload-label data-default="Приложить заполненную таблицу (необязательно)">Приложить заполненную таблицу (необязательно)</span>
           </label>
           <label class="consent"><input type="checkbox" name="consent" required><span>Согласен на <a href="#" data-toast="Демо: откроется согласие на обработку ПДн">обработку персональных данных</a></span></label>
           <button type="submit" class="btn btn--neon btn--block btn--lg">Получить индивидуальный расчёт</button>
         </form>
+
+        <template id="cItemTpl">
+          <div class="item">
+            <div class="item__head"><span>Товар <span class="item__num">1</span></span><button type="button" class="item__del" aria-label="Удалить товар">✕</button></div>
+            <label class="field"><span class="field__label">Наименование на русском <span class="req">*</span></span><input class="field__input" type="text" name="nameRu[]" placeholder="Например, стулья офисные" required></label>
+            <div class="grid-2">
+              <label class="field"><span class="field__label">По-китайски</span><input class="field__input" type="text" name="nameZh[]" placeholder="办公椅"></label>
+              <label class="field"><span class="field__label">Код ТН ВЭД</span><input class="field__input" type="text" inputmode="numeric" name="hs[]" placeholder="если знаете"></label>
+            </div>
+            <label class="field"><span class="field__label">Материал / состав</span><input class="field__input" type="text" name="material[]" placeholder="металл, пластик, ткань"></label>
+            <label class="upload upload--sm">
+              <input type="file" name="photo[]" accept="image/jpeg,image/png,image/webp,image/heic" multiple data-max="5">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 16V7.8l-3.3 3.3-1.4-1.4L12 4l5.7 5.7-1.4 1.4L13 7.8V16zm-7 2h16v2H4z"/></svg>
+              <span data-upload-label data-default="Фото товара">Фото товара</span>
+            </label>
+            <div class="thumbs"></div>
+            <label class="field"><span class="field__label">Бренд / торговая марка</span><input class="field__input" type="text" name="brand[]" placeholder="нет бренда — оставьте пустым"></label>
+            <label class="upload upload--sm">
+              <input type="file" name="brandPhoto[]" accept="image/jpeg,image/png,image/webp,image/heic" multiple data-max="3">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 16V7.8l-3.3 3.3-1.4-1.4L12 4l5.7 5.7-1.4 1.4L13 7.8V16zm-7 2h16v2H4z"/></svg>
+              <span data-upload-label data-default="Фото бренда / ТМ — обязательно, если есть бренд">Фото бренда / ТМ — обязательно, если есть бренд</span>
+            </label>
+            <div class="thumbs"></div>
+            <div class="grid-3">
+              <label class="field"><span class="field__label">Мест</span><input class="field__input" type="text" inputmode="numeric" name="places[]"></label>
+              <label class="field"><span class="field__label">Шт. в месте</span><input class="field__input" type="text" inputmode="numeric" name="perPlace[]"></label>
+              <label class="field"><span class="field__label">Всего шт./пар</span><input class="field__input" type="text" inputmode="numeric" name="qty[]"></label>
+            </div>
+            <div class="grid-2">
+              <label class="field"><span class="field__label">Объём, м³</span><input class="field__input" type="text" inputmode="decimal" name="volume[]"></label>
+              <label class="field"><span class="field__label">Вес единицы, кг</span><input class="field__input" type="text" inputmode="decimal" name="unitWeight[]"></label>
+              <label class="field"><span class="field__label">Нетто, кг</span><input class="field__input" type="text" inputmode="decimal" name="net[]"></label>
+              <label class="field"><span class="field__label">Брутто, кг</span><input class="field__input" type="text" inputmode="decimal" name="gross[]"></label>
+            </div>
+            <label class="field"><span class="field__label">Технические параметры / примечание</span><input class="field__input" type="text" name="note[]" placeholder="мощность, размеры, особенности"></label>
+          </div>
+        </template>
       </div>
     </div>
   </section>
