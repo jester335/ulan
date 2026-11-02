@@ -117,6 +117,10 @@
 </footer>
 
 <a href="${TG}" class="fab" target="_blank" rel="noopener" aria-label="Связаться с поддержкой">${svg('support')}</a>
+<button type="button" class="totop" aria-label="Наверх страницы" tabindex="-1">
+  <svg class="totop__ring" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" pathLength="100"/></svg>
+  <svg class="totop__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5 5 12.5l1.4 1.4 4.6-4.6V19h2V9.3l4.6 4.6 1.4-1.4z"/></svg>
+</button>
 
 <nav class="tabbar" aria-label="Быстрая навигация">
   ${TABS.map(([id, href, label, icon]) => id === 'calc'
@@ -301,8 +305,30 @@
 
   /* ---------- Кнопка поддержки прячется над подвалом (там есть свои контакты) ---------- */
   const fab = $('.fab');
-  new IntersectionObserver(([en]) => fab.classList.toggle('is-hidden', en.isIntersecting))
-    .observe($('.footer'));
+  const totop = $('.totop');
+  new IntersectionObserver(([en]) => {
+    fab.classList.toggle('is-hidden', en.isIntersecting);
+    totop.classList.toggle('is-low', en.isIntersecting); // занимает место скрытой кнопки поддержки
+  }).observe($('.footer'));
+
+  /* ---------- Кнопка «Наверх»: появляется после полутора экранов, кольцо — прогресс прокрутки ---------- */
+  let totopTick = false;
+  const totopUpdate = () => {
+    totopTick = false;
+    const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+    const show = y > innerHeight * 1.5;
+    totop.classList.toggle('is-shown', show);
+    totop.tabIndex = show ? 0 : -1;
+    totop.style.setProperty('--p', max > 0 ? Math.min(100, y / max * 100).toFixed(1) : 0);
+  };
+  addEventListener('scroll', () => { if (!totopTick) { totopTick = true; requestAnimationFrame(totopUpdate); } }, { passive: true });
+  addEventListener('resize', totopUpdate, { passive: true });
+  totopUpdate();
+  totop.addEventListener('click', () => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    totop.blur();
+  });
 
   /* ---------- Drawer ---------- */
   const burger = $('.burger'), drawer = $('#drawer');

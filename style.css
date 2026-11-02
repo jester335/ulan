@@ -596,6 +596,27 @@ select option, select optgroup { background: #1A1E1C; color: var(--text); }
 .fab { transition: opacity .25s, transform .25s; }
 .fab.is-hidden { opacity: 0; transform: scale(.6); pointer-events: none; }
 
+/* Наверх — над кнопкой поддержки, по центру её оси */
+.totop {
+  --p: 0; --lift: 0px;
+  position: fixed; z-index: 40; right: 20px; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 18px + 56px + 12px);
+  width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  background: rgba(16, 19, 17, .88); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+  opacity: 0; transform: translateY(calc(var(--lift) + 12px)) scale(.8); pointer-events: none;
+  transition: opacity .25s, transform .3s cubic-bezier(.2, .8, .2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.totop.is-shown { opacity: 1; transform: translateY(var(--lift)); pointer-events: auto; }
+.totop.is-low { --lift: 62px; } /* 12 + 56 − (56 − 44) / 2: центр встаёт в центр кнопки поддержки */
+.totop__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.totop__ring circle { fill: none; stroke: var(--neon); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p)); filter: drop-shadow(0 0 4px rgba(124, 255, 43, .7)); }
+.totop::before { content: ''; position: absolute; inset: 2px; border-radius: 50%; border: 2.5px solid rgba(124, 255, 43, .15); }
+.totop__arrow { position: relative; width: 22px; height: 22px; fill: var(--neon); transition: transform .2s; }
+.totop:hover .totop__arrow { transform: translateY(-2px); }
+.totop:focus-visible { outline: 2px solid var(--neon); outline-offset: 3px; }
+html.is-locked .totop { opacity: 0; pointer-events: none; }
+
 .tabbar {
   position: fixed; z-index: 50; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom));
   height: var(--tabbar-h); display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
@@ -709,6 +730,7 @@ select option, select optgroup { background: #1A1E1C; color: var(--text); }
   .nav a:hover, .nav a.is-active { color: var(--neon); }
   .burger, .tabbar { display: none; }
   .fab { bottom: 28px; right: 28px; }
+  .totop { right: 34px; bottom: calc(28px + 56px + 12px); }
   .toast { bottom: 32px; }
   .header__inner { height: 76px; }
 
