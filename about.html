@@ -37,16 +37,17 @@
         <span class="video__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
         <span class="video__label">Видео со склада в Иу</span>
       </a>
-      <div class="license">
-        <div class="license__doc" aria-hidden="true">
-          <span></span><span></span><span></span><span></span>
-          <i class="license__wm">ULAN EXPRESS</i>
-        </div>
-        <div>
-          <h3 class="h3">Свидетельство о регистрации</h3>
-          <p class="muted small">Официально зарегистрированная компания. Документ — с водяным знаком.</p>
-        </div>
-      </div>
+      <button type="button" class="cert" data-lightbox="files/certificate.webp" data-lightbox-full="files/certificate.jpg" aria-label="Открыть свидетельство о регистрации крупно">
+        <picture class="cert__img">
+          <source srcset="files/certificate-thumb.webp" type="image/webp">
+          <img src="files/certificate-thumb.jpg" width="720" height="542" alt="Свидетельство о регистрации компании (营业执照)" loading="lazy" decoding="async">
+        </picture>
+        <span class="cert__zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12zM9 6h2v3h3v2h-3v3H9v-3H6V9h3z"/></svg></span>
+        <span class="cert__body">
+          <b class="h3">Свидетельство о регистрации</b>
+          <span class="muted small">营业执照 · 义乌市佑和贸易有限公司. Нажмите, чтобы рассмотреть. Код компании 91330782MAEB03E261 можно проверить в госреестре Китая gsxt.gov.cn</span>
+        </span>
+      </button>
     </div>
   </section>
 

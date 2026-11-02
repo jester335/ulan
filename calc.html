@@ -70,10 +70,12 @@
 
         <fieldset class="field">
           <legend class="field__label">Тип доставки</legend>
-          <div class="seg seg--sm">
+          <div class="seg seg--sm seg--3">
             <label class="seg__opt"><input type="radio" name="speed" value="standard" checked><span>Стандартная<small>25–30 дней</small></span></label>
             <label class="seg__opt"><input type="radio" name="speed" value="express"><span>Быстрая 快陆<small>15–25 дней</small></span></label>
+            <label class="seg__opt"><input type="radio" name="speed" value="air"><span>Авиа ✈<small>по расписанию</small></span></label>
           </div>
+          <a href="#flights" class="link-sm">Расписание авиарейсов</a>
         </fieldset>
 
         <label class="field">
@@ -127,6 +129,18 @@
         <button type="button" class="btn btn--neon btn--block btn--lg" id="cargoSend" data-modal="Расчёт Карго" data-eyebrow="Отправить менеджеру" data-placeholder="Что за товар, когда груз будет готов">Отправить расчёт менеджеру</button>
       </form>
       <p class="note">Калькулятор считает только сборные грузы. Для Ж/Д контейнеров — вкладка «Контейнер».</p>
+
+      <div class="flights-card" id="flights-card">
+        <div class="flights-card__head">
+          <span class="flights-card__ic" aria-hidden="true">✈</span>
+          <div>
+            <h2 class="h3" id="flights">Расписание авиарейсов</h2>
+            <p class="muted small">Авиа — для срочных документов, образцов товара и небольших грузов. Фиксированная ставка за кг.</p>
+          </div>
+        </div>
+        <div class="flights" id="flightsList"></div>
+        <p class="muted small" style="margin:0">Даты обновляются вручную в админ-панели. Сейчас — демо-даты.</p>
+      </div>
     </div>
 
     <!-- ============ БЕЛАЯ ============ -->

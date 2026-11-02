@@ -268,6 +268,37 @@
     if (t.dataset.toast) toast(t.dataset.toast);
   });
 
+  /* ---------- Просмотр картинки на весь экран: [data-lightbox="src"] (+ data-lightbox-full — оригинал для увеличения) ---------- */
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-lightbox]');
+    if (!t) return;
+    e.preventDefault();
+    const full = t.dataset.lightboxFull || t.dataset.lightbox;
+    const box = document.createElement('div');
+    box.className = 'lightbox';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.setAttribute('aria-label', t.getAttribute('aria-label') || 'Просмотр');
+    box.innerHTML = `
+      <button type="button" class="lightbox__close" aria-label="Закрыть">✕</button>
+      <img class="lightbox__img" src="${esc(t.dataset.lightbox)}" alt="${esc($('img', t)?.alt || '')}">
+      <a class="btn btn--ghost btn--sm lightbox__full" href="${esc(full)}" target="_blank" rel="noopener">Открыть в полном размере</a>`;
+    document.body.append(box);
+    document.body.classList.add('no-scroll');
+    requestAnimationFrame(() => box.classList.add('is-open'));
+    const close = () => {
+      box.classList.remove('is-open');
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('keydown', onKey);
+      setTimeout(() => box.remove(), 250);
+      t.focus({ preventScroll: true });
+    };
+    const onKey = (ev) => { if (ev.key === 'Escape') close(); };
+    document.addEventListener('keydown', onKey);
+    box.addEventListener('click', (ev) => { if (!ev.target.closest('.lightbox__full')) close(); });
+    $('.lightbox__close', box).focus({ preventScroll: true });
+  });
+
   /* ---------- Кнопка поддержки прячется над подвалом (там есть свои контакты) ---------- */
   const fab = $('.fab');
   new IntersectionObserver(([en]) => fab.classList.toggle('is-hidden', en.isIntersecting))
@@ -482,6 +513,29 @@
   /* ==========================================================
      Калькулятор Карго (логика из ТЗ заказчика)
      ========================================================== */
+  // Авиадоставка: фиксированная ставка и расписание рейсов вносятся вручную в админке. Здесь демо-значения.
+  const AIR_RATE = 9;
+  const FLIGHTS = {
+    'Пекин → Москва': ['2026-11-05', '2026-11-12', '2026-11-19', '2026-11-26', '2026-12-03', '2026-12-10'],
+    'Москва → Пекин': ['2026-11-07', '2026-11-14', '2026-11-21', '2026-11-28', '2026-12-05', '2026-12-12']
+  };
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const upcoming = (route) => FLIGHTS[route].map((d) => new Date(d + 'T00:00:00')).filter((d) => d >= today);
+  const fmtDay = (d) => d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  const nextFlight = (route) => { const d = upcoming(route)[0]; return d && fmtDay(d); };
+
+  const flightsEl = $('#flightsList');
+  if (flightsEl) {
+    flightsEl.innerHTML = Object.keys(FLIGHTS).map((route) => {
+      const list = upcoming(route).slice(0, 5);
+      return `<div class="flights__route">
+  <b class="flights__title">${route}</b>
+  ${list.length ? `<ul class="flights__list">${list.map((d, i) => `<li${i ? '' : ' class="is-next"'}><span>${fmtDay(d)}</span><small>${d.toLocaleDateString('ru-RU', { weekday: 'short' })}${i ? '' : ' · ближайший'}</small></li>`).join('')}</ul>`
+    : '<p class="muted small">Даты рейсов уточняйте у менеджера</p>'}
+</div>`;
+    }).join('');
+  }
+
   const cargo = $('#cargoForm');
   if (cargo) {
     // Приложение 1: базовые цены для категории A (плотность ≥ 100)
@@ -500,6 +554,23 @@
       const alerts = [];
 
       if (cat === 'special') return { error: 'Свяжитесь с менеджером для расчёта специальных грузов (медицина, косметика, ювелирка, HDD, коммутаторы).' };
+
+      // Авиа: фиксированная ставка за кг, без плотности и надбавок за категорию
+      if (speed === 'air') {
+        if (!w) return { error: 'Введите вес груза.' };
+        const next = nextFlight('Пекин → Москва');
+        alerts.push({ t: 'info', m: 'Авиа — для срочных документов, образцов и небольших грузов.' + (next ? ` Ближайший рейс Пекин → Москва: ${next}.` : '') });
+        if (destType === 'region') alerts.push({ t: 'warn', m: `Авиарейс прилетает в Москву. Доставку до г. ${destName} уточнит менеджер.` });
+        let ins = 0;
+        if (fd.get('insurance') === 'on' && value > 0) {
+          const perKg = value / w;
+          const pct = perKg < 20 ? 0.01 : perKg <= 30 ? 0.02 : 0.03;
+          ins = value * pct;
+          alerts.push({ t: 'info', m: `Страховка ${pct * 100}% от стоимости груза. Максимальная выплата — $50/кг.` });
+        }
+        const ship = w * AIR_RATE;
+        return { ship, ins, total: ship + ins, method: `авиа · фиксированная ставка $${AIR_RATE.toFixed(2)}/кг (демо — задаётся в админке)`, alerts, kind: 'Авиа' };
+      }
       if (!w || !v) return { error: 'Введите вес и объём груза.' };
 
       const density = w / v;
@@ -540,7 +611,10 @@
     const render = () => {
       const r = calculate();
       $('#cargoResult').classList.toggle('is-error', !!r.error);
-      $('#cargoSend').dataset.sub = r.error ? '' : `Предварительный расчёт Карго: ${usd(r.total)} (${r.method})`;
+      $('#cargoSend').dataset.sub = r.error ? '' : `Предварительный расчёт ${r.kind || 'Карго'}: ${usd(r.total)} (${r.method})`;
+      $('#cargoSend').dataset.modal = r.kind === 'Авиа' ? 'Расчёт Авиа' : 'Расчёт Карго';
+      // для авиа объём не нужен — поле остаётся, но необязательное
+      $('#cargoForm [name=volume]').closest('.field').classList.toggle('is-optional', new FormData(cargo).get('speed') === 'air');
       if (r.error) {
         ['#rShip', '#rIns', '#rTotal'].forEach((s) => { $(s).textContent = '—'; });
         $('#rMeta').textContent = '';
@@ -718,39 +792,53 @@
   /* ==========================================================
      Витрина товаров (в WordPress — тип записи «Товар»)
      ========================================================== */
-  const CATS = { electronics: 'Электроника', home: 'Дом и кухня', tools: 'Инструменты', clothes: 'Одежда и обувь', auto: 'Автотовары', kids: 'Детские товары' };
+  // 4 категории от заказчика; цены и характеристики — демо
+  const CATS = { smarthome: 'Умный дом и мебель', energy: 'Энергия и зарядка', outdoor: 'Активный отдых', auto: 'Авто и транспорт' };
   const PRODUCTS = [
-    { id: 1, name: 'Беспроводные наушники TWS', cat: 'electronics', icon: '🎧', h: 190, retail: 1290, opt: 690, moq: 50, tags: ['hot'],
-      desc: 'Наушники с кейсом-зарядкой и сенсорным управлением. Подходят для продажи на маркетплейсах: хорошая маржа и стабильный спрос.',
-      specs: [['Bluetooth', '5.3'], ['Работа', 'до 6 ч + 24 ч с кейсом'], ['Цвета', 'белый, чёрный'], ['Упаковка', 'фирменная коробка']] },
-    { id: 2, name: 'Органайзер для кухни, набор 6 шт.', cat: 'home', icon: '🧺', h: 40, retail: 890, opt: 420, moq: 100, tags: ['deal'],
-      desc: 'Контейнеры для хранения круп и специй с герметичными крышками. Пищевой пластик, не впитывает запахи.',
-      specs: [['Материал', 'PP, пищевой'], ['Объём', '0,5–1,8 л'], ['В наборе', '6 шт.'], ['Цвет', 'прозрачный']] },
-    { id: 3, name: 'Набор инструментов, 46 предметов', cat: 'tools', icon: '🧰', h: 10, retail: 2490, opt: 1650, moq: 20, tags: ['hot'],
-      desc: 'Трещотка, головки и биты в пластиковом кейсе. Хром-ванадиевая сталь.',
-      specs: [['Предметов', '46'], ['Сталь', 'CrV'], ['Кейс', 'пластик'], ['Вес', '2,1 кг']] },
-    { id: 4, name: 'Кроссовки беговые', cat: 'clothes', icon: '👟', h: 260, retail: 2990, opt: 1790, moq: 30, tags: ['hot', 'deal'],
-      desc: 'Лёгкие кроссовки с дышащим верхом и амортизирующей подошвой. Размерная сетка 36–45.',
-      specs: [['Размеры', '36–45'], ['Верх', 'текстиль'], ['Подошва', 'EVA'], ['Цвета', '4 варианта']] },
-    { id: 5, name: 'Видеорегистратор Full HD', cat: 'auto', icon: '📹', h: 210, retail: 2190, opt: 1390, moq: 30, tags: [],
-      desc: 'Компактный регистратор с широким углом обзора и ночным режимом. Крепление на присоске.',
-      specs: [['Разрешение', '1920×1080'], ['Угол', '170°'], ['Экран', '2"'], ['Карта памяти', 'до 128 ГБ']] },
-    { id: 6, name: 'Детский конструктор, 520 деталей', cat: 'kids', icon: '🧸', h: 330, retail: 1190, opt: 640, moq: 60, tags: ['deal'],
-      desc: 'Совместим с популярными конструкторами. Инструкция с картинками, подходит детям от 6 лет.',
-      specs: [['Деталей', '520'], ['Возраст', '6+'], ['Материал', 'ABS-пластик'], ['Сертификат', 'ЕАС']] },
-    { id: 7, name: 'Светодиодная лента RGB, 5 м', cat: 'electronics', icon: '💡', h: 280, retail: 590, opt: 260, moq: 200, tags: ['deal'],
-      desc: 'Лента с пультом и управлением со смартфона. 16 млн цветов, режимы под музыку.',
-      specs: [['Длина', '5 м'], ['Питание', 'USB / 12 В'], ['Управление', 'пульт, приложение'], ['Защита', 'IP20']] },
-    { id: 8, name: 'Худи оверсайз', cat: 'clothes', icon: '🧥', h: 120, retail: 1890, opt: 980, moq: 50, tags: ['hot'],
-      desc: 'Плотный футер с начёсом, свободный крой. Возможна печать вашего логотипа от партии 100 шт.',
-      specs: [['Ткань', 'футер 3-нитка'], ['Плотность', '320 г/м²'], ['Размеры', 'S–XXL'], ['Цвета', '8 вариантов']] }
+    { id: 1, name: 'Умная прикроватная тумбочка', cat: 'smarthome', icon: '🛏️', h: 190, retail: 18900, opt: 11500, moq: 10, tags: ['hot'],
+      desc: 'Тумбочка с беспроводной зарядкой, подсветкой и датчиком движения. Ящик с доводчиком, управление касанием.',
+      specs: [['Зарядка', 'Qi 15 Вт + USB-C'], ['Подсветка', 'LED, 3 режима'], ['Материал', 'МДФ, металл'], ['Размер', '50 × 40 × 55 см']] },
+    { id: 2, name: 'Умный унитаз с подогревом', cat: 'smarthome', icon: '🚽', h: 200, retail: 64900, opt: 42000, moq: 5, tags: ['hot', 'deal'],
+      desc: 'Подогрев сиденья и воды, биде, сушка, автоматическая крышка и смыв. Пульт и сенсорная панель.',
+      specs: [['Питание', '220 В'], ['Функции', 'биде, сушка, автосмыв'], ['Управление', 'пульт, сенсор'], ['Сертификат', 'ЕАС по запросу']] },
+    { id: 3, name: 'Умный сейф с отпечатком', cat: 'smarthome', icon: '🔐', h: 260, retail: 15900, opt: 9800, moq: 10, tags: [],
+      desc: 'Открытие по отпечатку пальца, коду или ключу. Уведомления в приложении о попытках взлома.',
+      specs: [['Замок', 'отпечаток, код, ключ'], ['Сталь', '3 мм'], ['Объём', '30 л'], ['Приложение', 'Wi-Fi']] },
+    { id: 4, name: 'Портативная зарядная станция 2000 Вт', cat: 'energy', icon: '🔋', h: 95, retail: 79900, opt: 58000, moq: 5, tags: ['hot'],
+      desc: 'Питание для дачи, кемпинга и работы без сети. Розетки 220 В, USB, автомобильный выход, зарядка от солнечных панелей.',
+      specs: [['Ёмкость', '2048 Вт·ч, LiFePO4'], ['Мощность', '2000 Вт'], ['Выходы', '220 В ×4, USB ×6'], ['Вес', '22 кг']] },
+    { id: 5, name: 'Солнечная панель складная 200 Вт', cat: 'energy', icon: '☀️', h: 50, retail: 21900, opt: 14500, moq: 10, tags: ['deal'],
+      desc: 'Складная панель для зарядных станций. Монокристалл, защита от брызг, подставка в комплекте.',
+      specs: [['Мощность', '200 Вт'], ['Тип', 'монокристалл'], ['Защита', 'IP67'], ['Вес', '7,5 кг']] },
+    { id: 6, name: 'Дизельный генератор 6 кВт', cat: 'energy', icon: '⚡', h: 30, retail: 119000, opt: 89000, moq: 2, tags: [],
+      desc: 'Генератор в шумозащитном кожухе для дома и стройки. Электростарт, автоматика запуска по запросу.',
+      specs: [['Мощность', '6 кВт'], ['Фазы', '1 / 3'], ['Запуск', 'электростарт'], ['Бак', '15 л']] },
+    { id: 7, name: 'Палатка кемпинговая 4-местная', cat: 'outdoor', icon: '⛺', h: 140, retail: 12900, opt: 7900, moq: 20, tags: ['hot'],
+      desc: 'Быстросборная палатка с тамбуром и москитными сетками. Водостойкость 3000 мм.',
+      specs: [['Мест', '4'], ['Водостойкость', '3000 мм'], ['Сборка', '1 минута'], ['Вес', '6,8 кг']] },
+    { id: 8, name: 'Ящик для инструментов уличный', cat: 'outdoor', icon: '🧰', h: 10, retail: 6900, opt: 4200, moq: 30, tags: ['deal'],
+      desc: 'Ударопрочный ящик для багажника, дачи и пикапа. Замок, уплотнитель, крепления.',
+      specs: [['Материал', 'PP, ударопрочный'], ['Объём', '120 л'], ['Защита', 'от влаги и пыли'], ['Замок', 'есть']] },
+    { id: 9, name: 'Зарядная станция для электромобиля 22 кВт', cat: 'auto', icon: '🔌', h: 165, retail: 54900, opt: 38000, moq: 5, tags: ['hot'],
+      desc: 'Настенная зарядка для дома и бизнеса. Разъём Type 2 или GB/T, управление из приложения.',
+      specs: [['Мощность', '7 / 11 / 22 кВт'], ['Разъём', 'Type 2, GB/T'], ['Защита', 'IP55'], ['Управление', 'приложение, RFID']] },
+    { id: 10, name: 'Электросамокат 500 Вт', cat: 'auto', icon: '🛴', h: 280, retail: 34900, opt: 23500, moq: 10, tags: ['deal'],
+      desc: 'Складной самокат с запасом хода до 45 км. Двойные тормоза, подвеска, приложение.',
+      specs: [['Мотор', '500 Вт'], ['Запас хода', 'до 45 км'], ['Скорость', 'до 25 км/ч'], ['Колёса', '10"']] }
   ];
-  const TAG = { hot: ['Популярное', 'lbl--hot'], deal: ['Выгодно', 'lbl--deal'] };
+  const TAG = { hot: ['Хит продаж', 'lbl--hot'], deal: ['Выгодно', 'lbl--deal'] };
   const labels = (p) => p.tags.length ? `<div class="labels">${p.tags.map((t) => `<span class="lbl ${TAG[t][1]}">${TAG[t][0]}</span>`).join('')}</div>` : '';
   const requestAttrs = (p) => `data-modal="${esc(p.name)}" data-eyebrow="Запрос товара" data-sub="Розница ${rub(p.retail)} · опт ${rub(p.opt)} от ${p.moq} шт." data-placeholder="Количество, цвет, размер, город доставки"`;
+  // Telegram-группа с товарами (заказчик пришлёт ссылку; в WordPress — настройка в админке, у товара можно указать ссылку на свой пост)
+  const PRODUCTS_TG = TG;
+  const tgIco = `<svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${SOCIAL.tg}</svg>`;
+  const tgLink = (p) => p.tg || PRODUCTS_TG;
   const productCard = (p) => `
 <article class="pcard" style="--h:${p.h}">
-  <a href="product.html?id=${p.id}" class="pcard__img" aria-label="${esc(p.name)}"><span aria-hidden="true">${p.icon}</span>${labels(p)}</a>
+  <div class="pcard__media">
+    <a href="product.html?id=${p.id}" class="pcard__img" aria-label="${esc(p.name)}"><span aria-hidden="true">${p.icon}</span>${labels(p)}</a>
+    <a href="${tgLink(p)}" class="pcard__tg" target="_blank" rel="noopener" aria-label="${esc(p.name)} — смотреть в Telegram" title="Смотреть в Telegram">${tgIco}</a>
+  </div>
   <div class="pcard__body">
     <span class="pcard__cat">${CATS[p.cat]}</span>
     <h3 class="pcard__name"><a href="product.html?id=${p.id}">${esc(p.name)}</a></h3>
@@ -759,6 +847,11 @@
     <button type="button" class="btn btn--ghost btn--block" ${requestAttrs(p)}>Запросить</button>
   </div>
 </article>`;
+
+  const CAT_ICO = { smarthome: '🏠', energy: '🔋', outdoor: '⛺', auto: '🚗' };
+  $$('[data-product-cats]').forEach((el) => {
+    el.innerHTML = Object.entries(CATS).map(([k, l]) => `<a class="fchip" href="products.html?cat=${k}"><span aria-hidden="true">${CAT_ICO[k]}</span> ${l}</a>`).join('');
+  });
 
   $$('[data-products="popular"]').forEach((el) => {
     el.innerHTML = PRODUCTS.filter((p) => p.tags.includes('hot')).map(productCard).join('');
@@ -769,7 +862,7 @@
     let filter = new URLSearchParams(location.search).get('cat') || 'all';
     let q = '';
     const chips = $('#productFilters');
-    chips.innerHTML = [['all', 'Все'], ['hot', 'Популярное'], ['deal', 'Выгодно'], ...Object.entries(CATS)]
+    chips.innerHTML = [['all', 'Все'], ['hot', 'Хиты продаж'], ['deal', 'Выгодно'], ...Object.entries(CATS)]
       .map(([k, l]) => `<button type="button" class="fchip${k === filter ? ' is-active' : ''}" data-f="${k}" aria-pressed="${k === filter}">${l}</button>`).join('');
     const draw = () => {
       const list = PRODUCTS.filter((p) => (filter === 'all' || p.tags.includes(filter) || p.cat === filter)
@@ -813,6 +906,7 @@
   </div>
   <p class="note note--ok" style="margin:0">Цена включает международную доставку до Москвы. Доставка по РФ оплачивается отдельно.</p>
   <button type="button" class="btn btn--neon btn--block btn--lg" ${requestAttrs(p)}>Запросить / заказать</button>
+  <a href="${tgLink(p)}" class="btn btn--tg btn--block" target="_blank" rel="noopener">${tgIco}Больше фото и товаров в Telegram</a>
   <p class="pdesc">${esc(p.desc)}</p>
   <dl class="specs">${p.specs.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
 </div>`;

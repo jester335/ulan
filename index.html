@@ -124,7 +124,7 @@
 
       <a href="products.html" class="card card--dark">
         <h2 class="card__title">Товары</h2>
-        <p class="card__text">Популярное из Китая в розницу и оптом</p>
+        <p class="card__text">Умный дом, энергия, отдых и авто — в розницу и оптом</p>
         <div class="chips-mini" aria-hidden="true"><span>零售</span><span>批发</span></div>
         <span class="card__arrow" aria-hidden="true">→</span>
       </a>
@@ -209,11 +209,12 @@
     <div class="container section__head section__head--row">
       <div>
         <span class="eyebrow">Товары</span>
-        <h2 class="h2">Популярное сейчас</h2>
+        <h2 class="h2">Хиты продаж</h2>
       </div>
       <a href="products.html" class="swipe-hint" style="color:var(--neon)">все товары →</a>
     </div>
-    <div class="rail prail" tabindex="0" aria-label="Популярные товары" data-products="popular"></div>
+    <div class="container"><nav class="fchips pcats" aria-label="Категории товаров" data-product-cats></nav></div>
+    <div class="rail prail" tabindex="0" aria-label="Хиты продаж" data-products="popular"></div>
     <div class="container"><p class="note note--ok">Цена включает международную доставку до Москвы. Доставка по РФ оплачивается отдельно.</p></div>
   </section>
 
@@ -264,7 +265,10 @@
       <li class="why__item"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2zm3 5v2h10V9zm0 4v2h7v-2z"/></svg><div><h3>Менеджер на связи</h3><p>Telegram, WhatsApp, WeChat. Розница и опт — свои менеджеры.</p></div></li>
     </ul>
     <a href="about.html" class="license license--link">
-      <div class="license__doc" aria-hidden="true"><span></span><span></span><span></span><span></span><i class="license__wm">ULAN EXPRESS</i></div>
+      <picture class="license__thumb" aria-hidden="true">
+        <source srcset="files/certificate-thumb.webp" type="image/webp">
+        <img src="files/certificate-thumb.jpg" width="720" height="542" alt="" loading="lazy" decoding="async">
+      </picture>
       <div>
         <h3 class="h3">Официально зарегистрированная компания</h3>
         <p class="muted small">Свидетельство о регистрации, видео со склада и отзывы — на странице «О компании».</p>
@@ -289,7 +293,7 @@
       <h2 class="h2">Отвечаем сразу</h2>
     </div>
     <div class="cats faq" data-accordion>
-      <details class="cat"><summary><span>Сколько едет груз из Китая?</span></summary><p>Стандартная доставка Карго — 25–30 дней, быстрая 快陆 — 15–25 дней. Срок «белой» доставки зависит от таможенного оформления, менеджер назовёт его при расчёте.</p></details>
+      <details class="cat"><summary><span>Сколько едет груз из Китая?</span></summary><p>Стандартная доставка Карго — 25–30 дней, быстрая 快陆 — 15–25 дней. Срочные документы, образцы и небольшие грузы можно отправить <a href="calc.html#flights">авиа по расписанию рейсов</a>. Срок «белой» доставки зависит от таможенного оформления, менеджер назовёт его при расчёте.</p></details>
       <details class="cat"><summary><span>Как считается стоимость?</span></summary><p>По плотности груза: от 100 кг/м³ — по весу, меньше — по объёму. Ставка зависит от категории товара. Точную сумму покажет <a href="calc.html">калькулятор</a>.</p></details>
       <details class="cat"><summary><span>Я никогда не заказывал из Китая. С чего начать?</span></summary><p>Пришлите ссылки на товары в разделе <a href="buyout.html#us">«Выкуп — мы»</a>: мы выкупим товар у поставщика и доставим его. Менеджер подскажет на каждом шаге.</p></details>
       <details class="cat"><summary><span>Что будет, если груз потеряется?</span></summary><p>Действует обязательное страхование — компенсация $3 за кг. С дополнительной страховкой (1–3% от стоимости груза) выплата — до $50 за кг.</p></details>
